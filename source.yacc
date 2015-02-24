@@ -10,41 +10,54 @@
 
 %% 
 
-S:tINT tMAIN tPO tPF tAO Statementlist tAF {printf("Main is OK\n");}
-Statementlist : 
-	Statement  
-   	| Statementlist Statement 
+S:tINT tMAIN tPO tPF tAO Declarationlist Statementlist tAF {printf("Main is OK\n");}
 
-Statement : 
+Declarationlist : 
+	Declarations
+	|Declarationlist Declarations
+	|
+
+Declarations : 
 	Declaration tPV {printf("Declaration is OK\n");}
-	|Affectation tPV {printf("Affectation is OK\n");}
 	|tCONST Declaration tPV {printf("Constante is OK \n");}
-	|Printf tPV { printf("printf is OK\n");}
 	|DeclarationMul tPV {printf("DeclarationMul OK \n");} 
 
-Declaration : tINT tID  // int i
-Declaration : tINT tID tEGAL Number // int i =5 | int i = 4+3; 
 
-Printf : tPRINT tPO tID tPF // printf(i)
+Statementlist : 
+	Statement  
+   	|Statementlist Statement 
+   	|
+
+Statement : 
+	Affectation tPV {printf("Affectation is OK\n");}
+	|Printf tPV { printf("printf is OK\n");}
+	
+
+Declaration : tINT ID  // int i
+Declaration : tINT ID tEGAL Number // int i =5 | int i = 4+3; 
+
+Printf : tPRINT tPO ID tPF // printf(i)
+
+ID : tID {printf("variable : %s \n",$1);}
 
 DeclarationMul : tINT Listdeclare
 
 Listdeclare : 
 	Affectation tVIR Listdeclare 
 	| Affectation
-	|tID tVIR Listdeclare 
-	| tID 
+	| ID tVIR Listdeclare 
+	| ID 
 
 
 
 Number : 
-	tNB // 4
-	|tID
+	tNB {printf("value : %d \n",$1);}   // 4
+	|ID //toto
 	|tPO Number tPF // (4)
 	|Number Operateur Number // (4*5)+5
 
 Affectation : 
-	tID tEGAL Number
+	ID tEGAL Number
 
 
 Operateur : tPLUS | tMOINS | tDIV | tEGAL
