@@ -8,7 +8,9 @@
 %token <nb> tNB;
 %token <id> tID;
 
-
+%right '=' 
+%left '+' '-'
+%left '*' '/'
 
 %% 
 
@@ -65,6 +67,21 @@ Statement :
 	Affectation tPV {printf("Affectation is OK\n");}
 	|Printf tPV { printf("printf is OK\n");}
 	
+
+
+
+/********************************************************/
+/*********    EXPRESSIONS ARITHMETIQUES       ***********/
+/********************************************************/
+
+expr : expr '=' expr
+	   | expr '+' expr
+	   | expr '-' expr
+	   | expr'*' expr
+	   | expr '/' expr
+	   | '-' expr %prec '*' 
+
+
 
 
 
