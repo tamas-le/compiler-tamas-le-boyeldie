@@ -8,9 +8,9 @@
 %token <nb> tNB;
 %token <id> tID;
 
-%right '=' 
-%left '+' '-'
-%left '*' '/'
+%right tEGAL 
+%left tPLUS tMOINS
+%left tMUL tDIV
 
 %% 
 
@@ -70,20 +70,6 @@ Statement :
 
 
 
-/********************************************************/
-/*********    EXPRESSIONS ARITHMETIQUES       ***********/
-/********************************************************/
-
-expr : expr '=' expr
-	   | expr '+' expr
-	   | expr '-' expr
-	   | expr'*' expr
-	   | expr '/' expr
-	   | '-' expr %prec '*' 
-
-
-
-
 
 
 /********************************************************/
@@ -100,12 +86,14 @@ Printf : tPRINT tPO ID tPF // printf(i)
 ID : tID {printf("variable : %s \n",$1);}
 
 Number : 
-	tNB {printf("value : %d \n",$1);}   // 4
-	|ID //toto
+	Number tPLUS Number
+	|Number tMOINS Number
+	|Number tMUL Number
+	|Number tDIV Number // (4*5)+5
 	|tPO Number tPF // (4)
-	|Number Operateur Number // (4*5)+5
+	|tNB {printf("value : %d \n",$1);}   // 4
+	|ID //toto
 
-Operateur : tPLUS | tMOINS | tDIV | tEGAL
 
 //S:tMAIN {printf("Main \n");}
 //S:tNB {printf("value : %d", $1);}
