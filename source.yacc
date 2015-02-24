@@ -9,6 +9,11 @@
 %token <id> tID;
 
 %% 
+// printf
+//const
+//declaration multiples
+
+
 
 S:tINT tMAIN tPO tPF tAO Statementlist tAF {printf("Main is OK\n");}
 Statementlist : 
