@@ -1,6 +1,5 @@
 
 
 int main() {
-	int i;
-	i=1+2;
+	int i,j=8,toto,titi=10;
 }
