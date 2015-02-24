@@ -9,11 +9,6 @@
 %token <id> tID;
 
 %% 
-// printf
-//const
-//declaration multiples
-
-
 
 S:tINT tMAIN tPO tPF tAO Statementlist tAF {printf("Main is OK\n");}
 Statementlist : 
@@ -23,9 +18,23 @@ Statementlist :
 Statement : 
 	Declaration tPV {printf("Declaration is OK\n");}
 	|Affectation tPV {printf("Affectation is OK\n");}
+	|tCONST Declaration tPV {printf("Constante is OK \n");}
+	|Printf tPV { printf("printf is OK\n");}
+	|DeclarationMul tPV {printf("DeclarationMul OK \n");} 
 
 Declaration : tINT tID  // int i
 Declaration : tINT tID tEGAL Number // int i =5 | int i = 4+3; 
+
+Printf : tPRINT tPO tID tPF // printf(i)
+
+DeclarationMul : tINT Listdeclare
+
+Listdeclare : 
+	Affectation tVIR Listdeclare 
+	| Affectation
+	|tID tVIR Listdeclare 
+	| tID 
+
 
 
 Number : 
