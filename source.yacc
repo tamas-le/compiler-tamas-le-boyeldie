@@ -26,7 +26,7 @@ Declaration : tINT tID tEGAL Number // int i =5 | int i = 4+3;
 Number : 
 	tNB // 4
 	|tID
-	|tPO Number tPO // (4)
+	|tPO Number tPF // (4)
 	|Number Operateur Number // (4*5)+5
 
 Affectation : 
