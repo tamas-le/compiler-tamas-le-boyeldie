@@ -12,6 +12,13 @@
 
 S:tINT tMAIN tPO tPF tAO Declarationlist Statementlist tAF {printf("Main is OK\n");}
 
+
+
+/********************************************************/
+/*******************    DECLARATION    ******************/
+/********************************************************/
+
+
 Declarationlist : 
 	Declarations
 	|Declarationlist Declarations
@@ -21,6 +28,30 @@ Declarations :
 	Declaration tPV {printf("Declaration is OK\n");}
 	|tCONST Declaration tPV {printf("Constante is OK \n");}
 	|DeclarationMul tPV {printf("DeclarationMul OK \n");} 
+
+
+Declaration : tINT ID  // int i
+Declaration : tINT ID tEGAL Number // int i =5 | int i = 4+3;
+
+
+/********************************************************/
+/**********    DECLARATION MULTIPLES    *****************/
+/********************************************************/
+
+
+DeclarationMultiples : tINT DMlist
+
+DMlist : 
+	Affectation tVIR DMlist 
+	| Affectation
+	| ID tVIR DMlist 
+	| ID 
+
+
+
+/********************************************************/
+/*******************    STATEMENT    ********************/
+/********************************************************/
 
 
 Statementlist : 
@@ -33,22 +64,21 @@ Statement :
 	|Printf tPV { printf("printf is OK\n");}
 	
 
-Declaration : tINT ID  // int i
-Declaration : tINT ID tEGAL Number // int i =5 | int i = 4+3; 
+
+
+
+/********************************************************/
+/*******************    AUTRES       ********************/
+/********************************************************/
+
+
+
+Affectation : 
+	ID tEGAL Number
 
 Printf : tPRINT tPO ID tPF // printf(i)
 
 ID : tID {printf("variable : %s \n",$1);}
-
-DeclarationMul : tINT Listdeclare
-
-Listdeclare : 
-	Affectation tVIR Listdeclare 
-	| Affectation
-	| ID tVIR Listdeclare 
-	| ID 
-
-
 
 Number : 
 	tNB {printf("value : %d \n",$1);}   // 4
@@ -56,14 +86,15 @@ Number :
 	|tPO Number tPF // (4)
 	|Number Operateur Number // (4*5)+5
 
-Affectation : 
-	ID tEGAL Number
-
-
 Operateur : tPLUS | tMOINS | tDIV | tEGAL
 
 //S:tMAIN {printf("Main \n");}
 //S:tNB {printf("value : %d", $1);}
+
+
+
+
+
 
 %% 
 
