@@ -8,6 +8,8 @@
 %token <nb> tNB;
 %token <id> tID;
 
+
+
 %% 
 
 S:tINT tMAIN tPO tPF tAO Declarationlist Statementlist tAF {printf("Main is OK\n");}
@@ -27,7 +29,7 @@ Declarationlist :
 Declarations : 
 	Declaration tPV {printf("Declaration is OK\n");}
 	|tCONST Declaration tPV {printf("Constante is OK \n");}
-	|DeclarationMul tPV {printf("DeclarationMul OK \n");} 
+	|DeclarationMultiples tPV {printf("DeclarationMul OK \n");} 
 
 
 Declaration : tINT ID  // int i
