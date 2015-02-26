@@ -2,6 +2,6 @@
 
 int main() {
 	
-	r=(i+j)*(i+k/j);
+	int i,j,h=5,y,t=8;
 	
 }
