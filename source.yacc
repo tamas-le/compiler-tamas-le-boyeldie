@@ -1,8 +1,10 @@
 %{
 	#include <stdio.h>
+
 %}
 %union
 {int nb; char *id;}
+
 	
 %token tMAIN tPO tPF tAO tAF tCONST tINT tPLUS tMOINS tMUL tDIV tEGAL tVIR tFL tPV tPRINT
 %token <nb> tNB;
@@ -105,7 +107,12 @@ Number :
 
 %% 
 
-main() {
+int i =0;
+
+
+
+int main() {
+	
 	return yyparse();
 }
 
