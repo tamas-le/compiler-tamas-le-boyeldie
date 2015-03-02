@@ -114,6 +114,7 @@ int i =0;
 
 int main() {
 	init_table();
+	print_tab_symb();
 	return yyparse();
 }
 
