@@ -1,5 +1,6 @@
 %{
 	#include <stdio.h>
+	#include "symb_tab.h"
 
 %}
 %union
@@ -112,7 +113,7 @@ int i =0;
 
 
 int main() {
-	
+	init_table();
 	return yyparse();
 }
 
