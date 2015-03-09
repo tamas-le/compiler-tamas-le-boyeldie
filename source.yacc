@@ -12,6 +12,7 @@
 %token <id> tID;
 //%type <id> ID;
 %type <id> AffectationDeclaration;
+%type <nb> Number;
 
 %right tEGAL 
 %left tPLUS tMOINS
@@ -96,9 +97,9 @@ Number :
 	|Number tMOINS Number
 	|Number tMUL Number
 	|Number tDIV Number // (4*5)+5
-	|tPO Number tPF // (4)
-	|tNB {printf("value : %d \n",$1);insert(" ",TMP);}   // 4
-	|tID //toto
+	|tPO Number tPF {$$=$2;}// (4)
+	|tNB {printf("value : %d \n",$1);int adr=insert(" ",TMP); printf("AFC %d %d\n",adr,$1);$$=adr;}   // 4
+	|tID {int adr=get_id_for_name($1);int tmp=insert(" ",TMP);printf("COP %d %d \n",tmp,adr);$$=adr;} //toto
 
 
 //S:tMAIN {printf("Main \n");}
