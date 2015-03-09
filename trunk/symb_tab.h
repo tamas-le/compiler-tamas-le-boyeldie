@@ -2,12 +2,13 @@
 #define NOT_INITIALISED 0
 #define CONSTANT 1
 #define INITIALISED 2
+#define TMP 3
 
 #include "list/list.h"
 
 #ifndef SYMB
 #define SYMB
-#endif
+
 
 typedef struct symbole
 {
@@ -17,7 +18,7 @@ typedef struct symbole
 
 } symbole;
 
-llist * table_des_symboles;
+
 
 //initialiser la table
 void init_table();
@@ -37,3 +38,5 @@ int insert(char * nom,int state);
 int change_state(int newstate,char * name);
 
 void destroy_table();
+
+#endif

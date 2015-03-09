@@ -1,4 +1,4 @@
-compiler: source.lex source.yacc list/list.c
+compiler: source.lex source.yacc list/list.c symb_tab.c symb_tab.h
 	yacc -d source.yacc
 	flex source.lex
 	gcc -c list/list.c
