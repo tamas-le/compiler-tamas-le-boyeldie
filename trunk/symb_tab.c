@@ -76,6 +76,7 @@ int get_id_for_name(char * name){
 
 //supprimer un element de la table renvoie 0 si succès -1 sinon
 int remove_symb(char * nom){
+	symbole * symb=get_symbole
 
 	return 0;
 }
@@ -128,7 +129,10 @@ int change_state(int newstate,char * name){
 
 int get_state(char *name){
 	symbole * symb=get_symbole(name);
-	return symb->state; 
+	if (symbole!=NULL){
+		return symb->state; 
+	}
+	return -1
 }
 
 void print_tab_symb(){
