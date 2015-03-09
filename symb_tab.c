@@ -75,10 +75,8 @@ int get_id_for_name(char * name){
 
 
 //supprimer un element de la table renvoie 0 si succès -1 sinon
-int remove_symb(char * nom){
-	symbole * symb=get_symbole
-
-	return 0;
+void pop(){
+	list_pop(table_des_symboles);
 }
 
 // mettre un element dans la table renvoie 0 si succès -1 sinon
@@ -102,7 +100,7 @@ int insert(char * nom,int state){
 		new_symb->nom=nom;
 		new_symb->id =id_courant;
 		new_symb->state=state;
-		list_insert_end(table_des_symboles,new_symb);
+		list_insert_beginning(table_des_symboles,new_symb);
 	} else {
 		return -1;
 	}
@@ -129,10 +127,11 @@ int change_state(int newstate,char * name){
 
 int get_state(char *name){
 	symbole * symb=get_symbole(name);
-	if (symbole!=NULL){
+
+	if (symb!=NULL){
 		return symb->state; 
 	}
-	return -1
+	return -1;
 }
 
 void print_tab_symb(){
@@ -147,7 +146,10 @@ void destroy_table(){
 /*int main (){
 	init_table();
 	insert("toto",NOT_INITIALISED);
-	insert("toto",NOT_INITIALISED);
+	insert("julien",INITIALISED);
+	insert("  ",TMP);
+	print_tab_symb();
+	pop();
 	print_tab_symb();
 
 
