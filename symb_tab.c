@@ -4,8 +4,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+llist * table_des_symboles;
 
 int id_courant =0;
+int nb_tmp=0;
 
 int compare_symb (list_node * node,void * valeur){
 	char * pvaleur=(char *)valeur;
@@ -30,6 +32,9 @@ void display_symb(list_node * node){
 		break;
 		case 2:
 		printf("Variable initialisée\n");
+		break;
+		case 3:
+		printf("Variable temporaire\n");
 		break;
 	}
 }
@@ -78,23 +83,36 @@ int remove_symb(char * nom){
 // mettre un element dans la table renvoie 0 si succès -1 sinon
 int insert(char * nom,int state){
 
-	if (nom ==NULL || state<0 || state>2 ){
+	if (nom ==NULL || state<0 || state>3 ){
 		return -1;
 	}
-	id_courant++;
-	symbole *new_symb=malloc(sizeof(symbole));
-	new_symb->nom=nom;
-	new_symb->id =id_courant;
-	new_symb->state=state;
 
-	list_insert_end(table_des_symboles,new_symb);
-	return 0;
+	if (state ==TMP){
+		nb_tmp++;
+		nom = malloc(sizeof(char)*50);
+		sprintf(nom,"tmp_%d",nb_tmp);
+	}
+
+
+
+	if (get_id_for_name(nom)==-1){
+		id_courant++;
+		symbole *new_symb=malloc(sizeof(symbole));
+		new_symb->nom=nom;
+		new_symb->id =id_courant;
+		new_symb->state=state;
+		list_insert_end(table_des_symboles,new_symb);
+	} else {
+		return -1;
+	}
+
+	return id_courant;
 }
 
 //changer le flag d'un élément
 int change_state(int newstate,char * name){
 
-	if (name ==NULL || newstate<0 || newstate>2 ){
+	if (name ==NULL || newstate<0 || newstate>3 ){
 		return -1;
 	}
 	symbole * symb_to_change=get_symbole(name);
@@ -106,6 +124,11 @@ int change_state(int newstate,char * name){
 
 	return 0;
 
+}
+
+int get_state(char *name){
+	symbole * symb=get_symbole(name);
+	return symb->state; 
 }
 
 void print_tab_symb(){
@@ -120,15 +143,9 @@ void destroy_table(){
 /*int main (){
 	init_table();
 	insert("toto",NOT_INITIALISED);
-	insert("titi",INITIALISED);
+	insert("toto",NOT_INITIALISED);
 	print_tab_symb();
 
-	printf("id de toto : %d\n",get_id_for_name("toto") );
-	printf("id de titi : %d\n",get_id_for_name("titi") );
-
-	change_state(INITIALISED,"toto");
-
-	print_tab_symb();
 
 
 	return 0;

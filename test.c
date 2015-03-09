@@ -1,7 +1,10 @@
 
 
 int main() {
-	
-	int i,j,h=5,y,t=8;
+
+	const int i=5;
+
+	i=4;
+
 	
 }
