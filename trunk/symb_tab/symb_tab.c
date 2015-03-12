@@ -1,4 +1,4 @@
-#include "list/list.h"
+#include "../list/list.h"
 #include "symb_tab.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,6 +20,7 @@ int compare_symb (list_node * node,void * valeur){
 
 void display_symb(list_node * node){
 	symbole * test=(symbole *)node->data;
+	printf("\n----------------------------------------\n");
 	printf("Nom du symbole %s \n",test->nom);
 	printf("id : %d\n",test->id );
 
@@ -37,6 +38,30 @@ void display_symb(list_node * node){
 		printf("Variable temporaire\n");
 		break;
 	}
+	printf("----------------------------------------\n");
+}
+
+void print_symb(symbole *symb){
+	printf("----------------------------------------\n");
+	printf("Nom du symbole %s \n",symb->nom);
+	printf("id : %d\n",symb->id );
+
+	switch (symb->state){
+		case 0:
+		printf("Variable non initialisée\n");
+		break; 
+		case 1:
+		printf("Constante\n");
+		break;
+		case 2:
+		printf("Variable initialisée\n");
+		break;
+		case 3:
+		printf("Variable temporaire\n");
+		break;
+	}
+	printf("----------------------------------------\n");
+
 }
 
 
@@ -74,9 +99,9 @@ int get_id_for_name(char * name){
 
 
 
-//supprimer un element de la table renvoie 0 si succès -1 sinon
-void pop(){
-	list_pop(table_des_symboles);
+symbole* symb_pop(){
+	symbole * symb=(symbole *)list_pop(table_des_symboles);
+	return symb;
 }
 
 // mettre un element dans la table renvoie 0 si succès -1 sinon
