@@ -119,10 +119,11 @@ Number :
 int main() {
 	
 	fic=fopen("./ass.ass", "r+");
-	fprintf(fic, ";Assembleur généré par les duocodeurs\n");
-	init_table();
-	print_tab_symb();
-	return yyparse();
+	//fprintf(fic, ";Assembleur généré par les duocodeurs\n");
+	//init_table();
+	/*print_tab_symb();
+	return yyparse();*/
+	return 0;
 }
 
 yyerror(char *s){
