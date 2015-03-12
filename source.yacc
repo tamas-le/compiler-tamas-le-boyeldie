@@ -1,6 +1,7 @@
 %{
 	#include <stdio.h>
 	#include "symb_tab.h"
+	FILE *fic; 
 
 %}
 %union
@@ -20,7 +21,7 @@
 
 %% 
 
-S:tINT tMAIN tPO tPF tAO Declarationlist Statementlist tAF {printf("Main is OK\n");print_tab_symb();}
+S:tINT tMAIN tPO tPF tAO Declarationlist Statementlist tAF {printf("Main is OK\n");print_tab_symb();fclose(fic);}
 
 
 /********************************************************/
@@ -93,13 +94,13 @@ Printf : tPRINT tPO tID tPF // printf(i)
 //ID : tID {printf("variable : %s \n",$1);$$=$1;}
 
 Number : 
-	Number tPLUS Number {printf("ADD %d %d %d\n", $1, $1, $3); $$=$1;}
-	|Number tMOINS Number {printf("SOU %d %d %d\n", $1, $1, $3); $$=$1;}
-	|Number tMUL Number {printf("MUL %d %d %d\n", $1, $1, $3); $$=$1;}
-	|Number tDIV Number {printf("DIV %d %d %d\n", $1, $1, $3); $$=$1;}// (4*5)+5
+	Number tPLUS Number {fprintf(fic,"ADD %d %d %d\n", $1, $1, $3);pop(); $$=$1;}
+	|Number tMOINS Number {fprintf(fic,"SOU %d %d %d\n", $1, $1, $3);pop(); $$=$1;}
+	|Number tMUL Number {fprintf(fic,"MUL %d %d %d\n", $1, $1, $3);pop(); $$=$1;}
+	|Number tDIV Number {fprintf(fic,"DIV %d %d %d\n", $1, $1, $3);pop(); $$=$1;}// (4*5)+5
 	|tPO Number tPF {$$=$2;}// (4)
-	|tNB {printf("value : %d \n",$1);int adr=insert(" ",TMP); printf("AFC %d %d\n",adr,$1);$$=adr;}   // 4
-	|tID {int adr=get_id_for_name($1);int tmp=insert(" ",TMP);printf("COP %d %d \n",tmp,adr);$$=adr;} //toto
+	|tNB {printf("value : %d \n",$1);int adr=insert(" ",TMP); fprintf(fic,"AFC %d %d\n",adr,$1);$$=adr;}   // 4
+	|tID {int adr=get_id_for_name($1);int tmp=insert(" ",TMP);fprintf(fic,"COP %d %d \n",tmp,adr);$$=adr;} //toto
 
 
 //S:tMAIN {printf("Main \n");}
@@ -112,13 +113,13 @@ Number :
 
 %% 
 
-int i =0;
-
-
 
 
 
 int main() {
+	
+	fic=fopen("./ass.ass", "r+");
+	fprintf(fic, ";Assembleur généré par les duocodeurs\n");
 	init_table();
 	print_tab_symb();
 	return yyparse();
