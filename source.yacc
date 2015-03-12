@@ -1,6 +1,6 @@
 %{
 	#include <stdio.h>
-	#include "symb_tab.h"
+	#include "symb_tab/symb_tab.h"
 	FILE *fic; 
 
 %}
@@ -8,12 +8,13 @@
 {int nb; char *id;}
 
 	
-%token tMAIN tPO tPF tAO tAF tCONST tINT tPLUS tMOINS tMUL tDIV tEGAL tVIR tFL tPV tPRINT
+%token tMAIN tPO tPF tAO tAF tCONST tINT tPLUS tMOINS tMUL tDIV tEGAL tVIR tFL tPV tPRINT tLT tGT tIF
 %token <nb> tNB;
 %token <id> tID;
 //%type <id> ID;
 %type <id> AffectationDeclaration;
 %type <nb> Number;
+%type <nb> Condition;
 
 %right tEGAL 
 %left tPLUS tMOINS
@@ -74,6 +75,7 @@ Statementlist :
 Statement : 
 	Affectation tPV {printf("Affectation is OK\n");}
 	|Printf tPV { printf("printf is OK\n");}
+	|If
 	
 
 
@@ -89,15 +91,24 @@ Statement :
 Affectation : 
 	tID tEGAL Number{if(get_state($1)==CONSTANT)printf("Erreur\n");change_state(INITIALISED,$1);}
 
-Printf : tPRINT tPO tID tPF // printf(i)
+Printf : tPRINT tPO tID tPF
+						{
+							int id = get_id_for_name($3);
+							if (id ==-1){
+								yyerror("La variable n'existe pas");
+							} else {
+								fprintf(fic, "PRI %d",id);
+							}
+
+						} // printf(i)
 
 //ID : tID {printf("variable : %s \n",$1);$$=$1;}
 
 Number : 
-	Number tPLUS Number {fprintf(fic,"ADD %d %d %d\n", $1, $1, $3);pop(); $$=$1;}
-	|Number tMOINS Number {fprintf(fic,"SOU %d %d %d\n", $1, $1, $3);pop(); $$=$1;}
-	|Number tMUL Number {fprintf(fic,"MUL %d %d %d\n", $1, $1, $3);pop(); $$=$1;}
-	|Number tDIV Number {fprintf(fic,"DIV %d %d %d\n", $1, $1, $3);pop(); $$=$1;}// (4*5)+5
+	Number tPLUS Number {fprintf(fic,"ADD %d %d %d\n", $1, $1, $3);symb_pop(); $$=$1;}
+	|Number tMOINS Number {fprintf(fic,"SOU %d %d %d\n", $1, $1, $3);symb_pop(); $$=$1;}
+	|Number tMUL Number {fprintf(fic,"MUL %d %d %d\n", $1, $1, $3);symb_pop(); $$=$1;}
+	|Number tDIV Number {fprintf(fic,"DIV %d %d %d\n", $1, $1, $3);symb_pop(); $$=$1;}// (4*5)+5
 	|tPO Number tPF {$$=$2;}// (4)
 	|tNB {printf("value : %d \n",$1);int adr=insert(" ",TMP); fprintf(fic,"AFC %d %d\n",adr,$1);$$=adr;}   // 4
 	|tID {int adr=get_id_for_name($1);int tmp=insert(" ",TMP);fprintf(fic,"COP %d %d \n",tmp,adr);$$=adr;} //toto
@@ -106,10 +117,41 @@ Number :
 //S:tMAIN {printf("Main \n");}
 //S:tNB {printf("value : %d", $1);}
 
+/********************************************************/
+/*******************  CONDITIONS     ********************/
+/********************************************************/
+
+If : 
+	tIF tPO Condition tPF {
+			fprintf(fic, "JMF %d ?",$3 );
+		} 
+	tAO Statementlist tAF 
+
+	|tIF tPO Condition tPF 
+		{
+			fprintf(fic, "JMF %d ?",$3 );
+		} Statement 
 
 
-
-
+Condition : 
+	Number tLT Number 
+					{
+						fprintf(fic,"INF %d %d %d\n",$1,$1,$3);
+						symb_pop();
+						$$=$1;
+					}
+	|Number tGT Number
+					{
+						fprintf(fic,"SUP %d %d %d\n",$1,$1,$3);
+						symb_pop();
+						$$=$1;
+					}  
+	|Number tEGAL tEGAL Number
+					{
+						fprintf(fic,"EQU %d %d %d\n",$1,$1,$4);
+						symb_pop();
+						$$=$1;
+					}  
 
 %% 
 
@@ -118,12 +160,12 @@ Number :
 
 int main() {
 	
-	fic=fopen("./ass.ass", "r+");
-	//fprintf(fic, ";Assembleur généré par les duocodeurs\n");
-	//init_table();
-	/*print_tab_symb();
-	return yyparse();*/
-	return 0;
+	fic=fopen("./ass.ass", "w+");
+	fprintf(fic, ";Assembleur généré par les duocodeurs\n");
+	init_table();
+	print_tab_symb();
+	return yyparse();
+
 }
 
 yyerror(char *s){

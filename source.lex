@@ -14,11 +14,14 @@
 "}" {printf("FOUND } "); return tAF;}
 "const" {printf("FOUND CONST "); return tCONST;}
 "int" {printf("FOUND INT "); return tINT;}
+"if" {printf("FOUND IF");return tIF;}
 "+" {printf("FOUND + "); return tPLUS;}
 "-" {printf("FOUND - "); return tMOINS;}
 "*" {printf("FOUND * "); return tMUL;}
 "/" {printf("FOUND / "); return tDIV;}
 "=" {printf("FOUND = "); return tEGAL;}
+"<" {printf("FOUND <"); return tLT;}
+">" {printf("FOUND >"); return tGT;}
 " " {}
 "	" {}
 "," {printf("FOUND ; "); return tVIR;}

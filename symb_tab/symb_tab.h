@@ -4,7 +4,7 @@
 #define INITIALISED 2
 #define TMP 3
 
-#include "list/list.h"
+#include "../list/list.h"
 
 #ifndef SYMB
 #define SYMB
@@ -27,9 +27,7 @@ void init_table();
 //retourne l'adresse pour le nom d'un element, renvoie -1 si l'élément n'existe pas
 int get_id_for_name(char * name);
 
-
-//supprimer un element de la table
-int remove_symb(char * nom);
+symbole * symb_pop();
 
 // mettre un element dans la table
 int insert(char * nom,int state);
