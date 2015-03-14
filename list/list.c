@@ -9,8 +9,6 @@
  */
 llist* list_create(int (*CmpFunc)(list_node*,void*),void (*DpyFunc)(list_node*))
 {
-	if (!CmpFunc) return NULL;
-	if (!DpyFunc) return NULL;
 
 	llist *l = malloc(sizeof(llist));
 

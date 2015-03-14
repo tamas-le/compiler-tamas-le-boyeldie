@@ -3,9 +3,10 @@ compiler: source.lex source.yacc list/list.c symb_tab/symb_tab.c symb_tab/symb_t
 	flex source.lex
 	gcc -c list/list.c
 	gcc -c symb_tab/symb_tab.c
+	gcc -c jumper/jump.c
 	gcc -c y.tab.c
 	gcc -c lex.yy.c
-	gcc list.o symb_tab.o y.tab.o lex.yy.o -ll -o compiler
+	gcc list.o symb_tab.o jump.o y.tab.o lex.yy.o -ll -o compiler
 	
 test: compiler
 	./compiler < test.c

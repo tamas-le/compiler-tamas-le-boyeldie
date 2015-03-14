@@ -7,22 +7,16 @@
 llist * table_des_jump;
 
 void display_jump(list_node * node){
-	jump *j=(jump *)node;
+	jump *j=(jump *)node->data;
 	printf("Saut depuis %d vers %d\n", j->from,j->to);
 }
-
-void init_table(){
-	void (*pFonctionDisplay)(list_node*);
-	pFonctionDisplay=display_jump;
-	table_des_jump=list_create(NULL,pFonctionDisplay);
-}
-
-
 
 
 
 void init_jump(){
-
+	void (*pFonctionDisplay)(list_node*);
+	pFonctionDisplay=display_jump;
+	table_des_jump=list_create(NULL,pFonctionDisplay);
 }
 
 int add_jump(int from,int to){
@@ -35,15 +29,35 @@ int add_jump(int from,int to){
 
 
 int update_jump(int from, int to){
-
+	list_node *noeud=table_des_jump->node;
+	jump *j=(jump *)noeud->data;
+	if (from !=-1){
+		j->from=from;
+	}
+	if (to!=-1){
+		j->to=to;
+	}
 	return 0;
 }
 
-int main(int argc, char const *argv[])
+void jump_pop(){
+	list_pop(table_des_jump);
+}
+
+
+void print_jump(){
+	print_list(table_des_jump);
+}
+
+/*int main(int argc, char const *argv[])
 {
-	init_table();
+	init_jump();
 	add_jump(1,2);
 	add_jump(3,4);
+	add_jump(5,6);
+	add_jump(7,8);
+	print_list(table_des_jump);
+	update_jump(-1,10);
 	print_list(table_des_jump);
 	return 0;
-}
+}*/
