@@ -1,7 +1,11 @@
 %{
 	#include <stdio.h>
 	#include "symb_tab/symb_tab.h"
-	FILE *fic; 
+	#include "jumper/jump.h"
+
+	FILE *fic;
+	int nb_instructions_assembleur=0; 
+	void update_jump_ass();
 
 %}
 %union
@@ -22,7 +26,15 @@
 
 %% 
 
-S:tINT tMAIN tPO tPF tAO Declarationlist Statementlist tAF {printf("Main is OK\n");print_tab_symb();fclose(fic);}
+S:tINT tMAIN tPO tPF tAO Declarationlist Statementlist tAF {
+	printf("Main is OK\n");
+	print_tab_symb();
+	update_jump_ass();
+	fclose(fic);
+	print_jump();
+	printf("Nombre d'instructions assembleur : %d\n",nb_instructions_assembleur);
+	
+}
 
 
 /********************************************************/
@@ -97,7 +109,8 @@ Printf : tPRINT tPO tID tPF
 							if (id ==-1){
 								yyerror("La variable n'existe pas");
 							} else {
-								fprintf(fic, "PRI %d",id);
+								fprintf(fic, "PRI %d\n",id);
+								nb_instructions_assembleur++;
 							}
 
 						} // printf(i)
@@ -105,13 +118,13 @@ Printf : tPRINT tPO tID tPF
 //ID : tID {printf("variable : %s \n",$1);$$=$1;}
 
 Number : 
-	Number tPLUS Number {fprintf(fic,"ADD %d %d %d\n", $1, $1, $3);symb_pop(); $$=$1;}
-	|Number tMOINS Number {fprintf(fic,"SOU %d %d %d\n", $1, $1, $3);symb_pop(); $$=$1;}
-	|Number tMUL Number {fprintf(fic,"MUL %d %d %d\n", $1, $1, $3);symb_pop(); $$=$1;}
-	|Number tDIV Number {fprintf(fic,"DIV %d %d %d\n", $1, $1, $3);symb_pop(); $$=$1;}// (4*5)+5
+	Number tPLUS Number {fprintf(fic,"ADD %d %d %d\n", $1, $1, $3);symb_pop(); $$=$1;nb_instructions_assembleur++;}
+	|Number tMOINS Number {fprintf(fic,"SOU %d %d %d\n", $1, $1, $3);symb_pop(); $$=$1;nb_instructions_assembleur++;}
+	|Number tMUL Number {fprintf(fic,"MUL %d %d %d\n", $1, $1, $3);symb_pop(); $$=$1;nb_instructions_assembleur++;}
+	|Number tDIV Number {fprintf(fic,"DIV %d %d %d\n", $1, $1, $3);symb_pop(); $$=$1;nb_instructions_assembleur++;}// (4*5)+5
 	|tPO Number tPF {$$=$2;}// (4)
-	|tNB {printf("value : %d \n",$1);int adr=insert(" ",TMP); fprintf(fic,"AFC %d %d\n",adr,$1);$$=adr;}   // 4
-	|tID {int adr=get_id_for_name($1);int tmp=insert(" ",TMP);fprintf(fic,"COP %d %d \n",tmp,adr);$$=adr;} //toto
+	|tNB {printf("value : %d \n",$1);int adr=insert(" ",TMP); fprintf(fic,"AFC %d %d\n",adr,$1);$$=adr;nb_instructions_assembleur++;}   // 4
+	|tID {int adr=get_id_for_name($1);int tmp=insert(" ",TMP);fprintf(fic,"COP %d %d \n",tmp,adr);$$=adr;nb_instructions_assembleur++;} //toto
 
 
 //S:tMAIN {printf("Main \n");}
@@ -123,32 +136,43 @@ Number :
 
 If : 
 	tIF tPO Condition tPF {
-			fprintf(fic, "JMF %d ?",$3 );
+			fprintf(fic, "JMF %d ?\n",$3 );
+			nb_instructions_assembleur++;
+			add_jump(nb_instructions_assembleur,-1);
 		} 
-	tAO Statementlist tAF 
+	tAO Statementlist tAF {
+			update_jump(-1,nb_instructions_assembleur+1);
+	}
 
 	|tIF tPO Condition tPF 
 		{
-			fprintf(fic, "JMF %d ?",$3 );
-		} Statement 
+			fprintf(fic, "JMF %d ?\n",$3 );
+			nb_instructions_assembleur++;
+			add_jump(nb_instructions_assembleur,-1);
+		} Statement {
+			update_jump(-1,nb_instructions_assembleur);
+		}
 
 
 Condition : 
 	Number tLT Number 
 					{
 						fprintf(fic,"INF %d %d %d\n",$1,$1,$3);
+						nb_instructions_assembleur++;
 						symb_pop();
 						$$=$1;
 					}
 	|Number tGT Number
 					{
 						fprintf(fic,"SUP %d %d %d\n",$1,$1,$3);
+						nb_instructions_assembleur++;
 						symb_pop();
 						$$=$1;
 					}  
 	|Number tEGAL tEGAL Number
 					{
 						fprintf(fic,"EQU %d %d %d\n",$1,$1,$4);
+						nb_instructions_assembleur++;
 						symb_pop();
 						$$=$1;
 					}  
@@ -159,14 +183,19 @@ Condition :
 
 
 int main() {
-	
+	// initialisation du fichier
 	fic=fopen("./ass.ass", "w+");
 	fprintf(fic, ";Assembleur généré par les duocodeurs\n");
+	nb_instructions_assembleur++;
+	//initialisation des tables symboles et saut
 	init_table();
-	print_tab_symb();
-	return yyparse();
+	init_jump();
 
+	return yyparse();
 }
+
+
+
 
 yyerror(char *s){
 	fprintf(stderr, "%s\n", s);
