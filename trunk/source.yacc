@@ -3,9 +3,14 @@
 	#include "symb_tab/symb_tab.h"
 	#include "jumper/jump.h"
 
+	#define TAILLE_MAX 1000
+
 	FILE *fic;
 	int nb_instructions_assembleur=0; 
-	void update_jump_ass();
+	void display_file();
+	void replace_line(int num_line);
+	int trouver_indice(char * ligne);
+	char * generer_chaine(int to,char * chaine_depart,int indice);
 
 %}
 %union
@@ -29,10 +34,11 @@
 S:tINT tMAIN tPO tPF tAO Declarationlist Statementlist tAF {
 	printf("Main is OK\n");
 	print_tab_symb();
-	update_jump_ass();
 	fclose(fic);
 	print_jump();
 	printf("Nombre d'instructions assembleur : %d\n",nb_instructions_assembleur);
+	//display_file();
+	replace_line(8);
 	
 }
 
@@ -200,5 +206,71 @@ int main() {
 yyerror(char *s){
 	fprintf(stderr, "%s\n", s);
 }
+
+void display_file(){
+	FILE* fichier = NULL;
+    char chaine[TAILLE_MAX] = "";
+ 
+    fichier = fopen("./ass.ass", "r+");
+ 
+    if (fichier != NULL)
+    {
+        while (fgets(chaine, TAILLE_MAX, fichier) != NULL) 
+        {
+            printf("%s", chaine);
+        }
+ 
+        fclose(fichier);
+    }
+}
+
+
+void replace_line(int num_line){
+	int num_ligne_courrante=0;
+	FILE* fichier = NULL;
+    char chaine[TAILLE_MAX] = "";
+    fichier = fopen("./ass.ass", "r+");
+
+
+
+    if (fichier !=NULL)
+    {
+    	while(fgets(chaine, TAILLE_MAX, fichier) != NULL)
+    	{
+    		num_ligne_courrante++;
+    		printf("%s",chaine );
+    		if (num_ligne_courrante==num_line){
+    			printf("C'est la bonne ligne !\n");
+    			printf("indice du ? : %d",trouver_indice(chaine));
+    		}
+    	}
+    	fclose(fichier);
+    }
+
+}
+
+
+int trouver_indice(char * ligne){
+	char c;
+    int indice_chaine=0;
+    do{
+    				c=ligne[indice_chaine];
+    				
+    				if (c=='?'){
+    					return indice_chaine;
+    				}
+    				indice_chaine++;
+    }while(c!='\n');
+
+    return -1;
+
+}
+
+char * generer_chaine(int to,char * chaine_depart,int indice){
+	char * resultat;
+}
+
+
+
 	
 	

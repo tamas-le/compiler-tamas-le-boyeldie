@@ -6,9 +6,6 @@ int main() {
 	if(2==3){
 		printf(i);
 		printf(j);
-		if (0<0){
-			printf(k);
-		}
 	}
 
 	i=4+5;
