@@ -10,12 +10,19 @@ typedef struct jump
 	int to;
 } jump;
 
-void init_jump();
+void display_jump(list_node * node);
 
+
+void init_jump();
 
 int add_jump(int from,int to);
 
 
 int update_jump(int from, int to);
+
+void jump_pop();
+
+
+void print_jump();
 
 #endif
