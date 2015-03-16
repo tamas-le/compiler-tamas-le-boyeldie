@@ -14,7 +14,7 @@
 {int nb; char *id;}
 
 	
-%token tMAIN tPO tPF tAO tAF tCONST tINT tPLUS tMOINS tMUL tDIV tEGAL tVIR tFL tPV tPRINT tLT tGT tIF
+%token tMAIN tPO tPF tAO tAF tCONST tINT tPLUS tMOINS tMUL tDIV tEGAL tVIR tFL tPV tPRINT tLT tGT tIF tELSE
 %token <nb> tNB;
 %token <id> tID;
 //%type <id> ID;
@@ -29,15 +29,12 @@
 %% 
 
 S:tINT tMAIN tPO tPF tAO Declarationlist Statementlist tAF {
-	printf("Main is OK\n");
-	print_tab_symb();
+	//printf("Main is OK\n");
+	//print_tab_symb();
 
 	fclose(fic);
 	printf("Nombre d'instructions assembleur : %d\n",nb_instructions_assembleur);
-	//jump *j=(jump *)jump_pop();
-	//replace_line(j->from,j->to,fic);
 
-	
 }
 
 
@@ -131,41 +128,58 @@ Number :
 	|tID {int adr=get_id_for_name($1);int tmp=insert(" ",TMP);fprintf(fic,"COP %d %d \n",tmp,adr);$$=adr;nb_instructions_assembleur++;} //toto
 
 
-//S:tMAIN {printf("Main \n");}
-//S:tNB {printf("value : %d", $1);}
 
 /********************************************************/
 /*******************  CONDITIONS     ********************/
 /********************************************************/
 
-If : 
-	tIF tPO Condition tPF {
-			fprintf(fic, "JMF %d ???\n",$3 );
-			nb_instructions_assembleur++;
-			add_jump(nb_instructions_assembleur,-1);
-		} 
-	tAO Statementlist tAF {
-			update_jump(-1,nb_instructions_assembleur+1);
-			fclose(fic);
-			jump *j=(jump *)jump_pop();
-			replace_line(j->from,j->to,fic);
-			fopen("./ass.ass","a+");
-		
+If :Ifsimple{
+	printf("Ya pas de else\n");
+	update_jump(-1,nb_instructions_assembleur+1);
+	jump *j=(jump *)jump_pop();
+
+	fclose(fic);
+	replace_line(j->from,j->to,fic);
+	fopen("./ass.ass","a+");
+
+	}
+	|Ifsimple Else{
+		printf("Ya un else !\n");
+		update_jump(-1,nb_instructions_assembleur+1);
+		jump *j=(jump *)jump_pop();
+		fclose(fic);
+		replace_line(j->from,j->to,fic);
+		fopen("./ass.ass","a+");
 	}
 
-	|tIF tPO Condition tPF 
-		{
-			fprintf(fic, "JMF %d ???\n",$3 );
-			nb_instructions_assembleur++;
-			add_jump(nb_instructions_assembleur,-1);
-		} Statement {
-			update_jump(-1,nb_instructions_assembleur);
-			fclose(fic);
-			jump *j=(jump *)jump_pop();
-			replace_line(j->from,j->to,fic);
-			fopen("./ass.ass","a+");
-			
-		}
+
+Ifsimple:tIF tPO Condition tPF {
+		fprintf(fic, "JMF %d ???\n",$3 );
+		nb_instructions_assembleur++;
+		add_jump(nb_instructions_assembleur,-1);
+		} 
+	tAO Statementlist tAF {
+		//On met à jour le saut dans la liste et on l'enlève
+		update_jump(-1,nb_instructions_assembleur+2);
+		jump *j=(jump *)jump_pop();
+
+		//On ajoute un saut inconditionel. On sait pas encore ou on va ça dépend si il y a un else ou non.
+		fprintf(fic, "JMP ???\n");
+		nb_instructions_assembleur++;
+		add_jump(nb_instructions_assembleur,-1);
+		
+
+
+		//Mise à jour du saut dans le fichier avec la bonne valeur
+		fclose(fic);
+		replace_line(j->from,j->to,fic);
+		fopen("./ass.ass","a+");	
+	}
+
+Else:tELSE tAO Statementlist tAF {
+
+}
+
 
 
 Condition : 
