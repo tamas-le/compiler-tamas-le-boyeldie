@@ -40,8 +40,8 @@ int update_jump(int from, int to){
 	return 0;
 }
 
-void jump_pop(){
-	list_pop(table_des_jump);
+jump * jump_pop(){
+	return (jump *)list_pop(table_des_jump);
 }
 
 
