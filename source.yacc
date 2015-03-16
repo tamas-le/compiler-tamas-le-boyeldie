@@ -3,14 +3,10 @@
 	#include "symb_tab/symb_tab.h"
 	#include "jumper/jump.h"
 
-	#define TAILLE_MAX 1000
+	
 
 	FILE *fic;
 	int nb_instructions_assembleur=0; 
-	void display_file();
-	void replace_line(int num_line);
-	int trouver_indice(char * ligne);
-	char * generer_chaine(int to,char * chaine_depart,int indice);
 
 %}
 %union
@@ -36,9 +32,10 @@ S:tINT tMAIN tPO tPF tAO Declarationlist Statementlist tAF {
 	print_tab_symb();
 	fclose(fic);
 	print_jump();
+	jump *j=(jump *)jump_pop();
+	print_jump();
+	printf("from : %d to : %d\n",j->from,j->to );
 	printf("Nombre d'instructions assembleur : %d\n",nb_instructions_assembleur);
-	//display_file();
-	replace_line(8);
 	
 }
 
@@ -142,7 +139,7 @@ Number :
 
 If : 
 	tIF tPO Condition tPF {
-			fprintf(fic, "JMF %d ?\n",$3 );
+			fprintf(fic, "JMF %d ???\n",$3 );
 			nb_instructions_assembleur++;
 			add_jump(nb_instructions_assembleur,-1);
 		} 
@@ -152,7 +149,7 @@ If :
 
 	|tIF tPO Condition tPF 
 		{
-			fprintf(fic, "JMF %d ?\n",$3 );
+			fprintf(fic, "JMF %d ???\n",$3 );
 			nb_instructions_assembleur++;
 			add_jump(nb_instructions_assembleur,-1);
 		} Statement {
@@ -207,68 +204,7 @@ yyerror(char *s){
 	fprintf(stderr, "%s\n", s);
 }
 
-void display_file(){
-	FILE* fichier = NULL;
-    char chaine[TAILLE_MAX] = "";
- 
-    fichier = fopen("./ass.ass", "r+");
- 
-    if (fichier != NULL)
-    {
-        while (fgets(chaine, TAILLE_MAX, fichier) != NULL) 
-        {
-            printf("%s", chaine);
-        }
- 
-        fclose(fichier);
-    }
-}
 
-
-void replace_line(int num_line){
-	int num_ligne_courrante=0;
-	FILE* fichier = NULL;
-    char chaine[TAILLE_MAX] = "";
-    fichier = fopen("./ass.ass", "r+");
-
-
-
-    if (fichier !=NULL)
-    {
-    	while(fgets(chaine, TAILLE_MAX, fichier) != NULL)
-    	{
-    		num_ligne_courrante++;
-    		printf("%s",chaine );
-    		if (num_ligne_courrante==num_line){
-    			printf("C'est la bonne ligne !\n");
-    			printf("indice du ? : %d",trouver_indice(chaine));
-    		}
-    	}
-    	fclose(fichier);
-    }
-
-}
-
-
-int trouver_indice(char * ligne){
-	char c;
-    int indice_chaine=0;
-    do{
-    				c=ligne[indice_chaine];
-    				
-    				if (c=='?'){
-    					return indice_chaine;
-    				}
-    				indice_chaine++;
-    }while(c!='\n');
-
-    return -1;
-
-}
-
-char * generer_chaine(int to,char * chaine_depart,int indice){
-	char * resultat;
-}
 
 
 

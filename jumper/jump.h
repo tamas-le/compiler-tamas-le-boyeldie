@@ -20,7 +20,7 @@ int add_jump(int from,int to);
 
 int update_jump(int from, int to);
 
-void jump_pop();
+jump * jump_pop();
 
 
 void print_jump();
