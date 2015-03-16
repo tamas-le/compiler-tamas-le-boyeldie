@@ -2,6 +2,7 @@
 	#include <stdio.h>
 	#include "symb_tab/symb_tab.h"
 	#include "jumper/jump.h"
+	#include "ass_file/file_ass.h"
 
 	
 
@@ -30,12 +31,12 @@
 S:tINT tMAIN tPO tPF tAO Declarationlist Statementlist tAF {
 	printf("Main is OK\n");
 	print_tab_symb();
+
 	fclose(fic);
-	print_jump();
-	jump *j=(jump *)jump_pop();
-	print_jump();
-	printf("from : %d to : %d\n",j->from,j->to );
 	printf("Nombre d'instructions assembleur : %d\n",nb_instructions_assembleur);
+	//jump *j=(jump *)jump_pop();
+	//replace_line(j->from,j->to,fic);
+
 	
 }
 
@@ -145,6 +146,11 @@ If :
 		} 
 	tAO Statementlist tAF {
 			update_jump(-1,nb_instructions_assembleur+1);
+			fclose(fic);
+			jump *j=(jump *)jump_pop();
+			replace_line(j->from,j->to,fic);
+			fopen("./ass.ass","a+");
+		
 	}
 
 	|tIF tPO Condition tPF 
@@ -154,6 +160,11 @@ If :
 			add_jump(nb_instructions_assembleur,-1);
 		} Statement {
 			update_jump(-1,nb_instructions_assembleur);
+			fclose(fic);
+			jump *j=(jump *)jump_pop();
+			replace_line(j->from,j->to,fic);
+			fopen("./ass.ass","a+");
+			
 		}
 
 

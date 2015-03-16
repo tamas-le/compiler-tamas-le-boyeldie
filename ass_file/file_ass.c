@@ -26,18 +26,23 @@ void display_file(){
 }
 
 
-void replace_line(int num_line,int to){
+void replace_line(int num_line,int to,FILE *file){
 	int num_ligne_courrante=0;
-	FILE* fichier = NULL;
     char chaine[TAILLE_MAX] = "";
-    fichier = fopen("./ass.ass", "r+");
     int indice_pi;
     int taille;
+    printf("Remplacement de ligne\n");
+
+    FILE * fichier=fopen("./ass.ass", "r+");
+
 
     if (fichier !=NULL)
     {
+        printf("Le fichier existe et est ouvert\n");
+
     	while(fgets(chaine, TAILLE_MAX, fichier) != NULL)
     	{
+            printf("Parcours ligne par ligne\n");
     		num_ligne_courrante++;
     		printf("%s",chaine );
     		if (num_ligne_courrante==num_line){
@@ -50,7 +55,9 @@ void replace_line(int num_line,int to){
     			fputs(generer_chaine(to,chaine,indice_pi),fichier);
     		}
     	}
-    	fclose(fichier);
+        fclose(fichier);
+    } else {
+        printf("Erreur fichier\n");
     }
 
 }
@@ -73,14 +80,12 @@ int trouver_indice(char * ligne){
 
 char * generer_chaine(int to,char * chaine_depart,int indice){
 	char * resultat = malloc (sizeof(char)*50);
-	//chaine_depart[indice]=dig;
 	chaine_depart[indice]='\0';
 	sprintf(resultat,"%s%d \n",chaine_depart,to);
-	//printf("%s\n",chaine_depart);
 	return resultat;
 }
 
-int main(int argc, char const *argv[])
+/*int main(int argc, char const *argv[])
 {
 	printf("Test de la gestion du fichier\n");
 	//display_file();
@@ -89,4 +94,4 @@ int main(int argc, char const *argv[])
 	//printf("%s\n",test ); 
 	replace_line(8,20);
 	return 0;
-}
+}*/
