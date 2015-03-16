@@ -7,26 +7,27 @@
 
 %%
 
-"main" {printf("FOUND MAIN "); return tMAIN;}
-"(" {printf("FOUND ( "); return tPO;}
-")" {printf("FOUND ) "); return tPF;}
-"{" {printf("FOUND { "); return tAO;}
-"}" {printf("FOUND } "); return tAF;}
-"const" {printf("FOUND CONST "); return tCONST;}
-"int" {printf("FOUND INT "); return tINT;}
-"if" {printf("FOUND IF");return tIF;}
-"+" {printf("FOUND + "); return tPLUS;}
-"-" {printf("FOUND - "); return tMOINS;}
-"*" {printf("FOUND * "); return tMUL;}
-"/" {printf("FOUND / "); return tDIV;}
-"=" {printf("FOUND = "); return tEGAL;}
-"<" {printf("FOUND <"); return tLT;}
-">" {printf("FOUND >"); return tGT;}
+"main" {return tMAIN;}
+"(" {return tPO;}
+")" {return tPF;}
+"{" {return tAO;}
+"}" {return tAF;}
+"const" {return tCONST;}
+"int" {return tINT;}
+"if" {return tIF;}
+"else" {return tELSE;}
+"+" {return tPLUS;}
+"-" {return tMOINS;}
+"*" {return tMUL;}
+"/" {return tDIV;}
+"=" { return tEGAL;}
+"<" { return tLT;}
+">" {return tGT;}
 " " {}
 "	" {}
-"," {printf("FOUND ; "); return tVIR;}
+"," {return tVIR;}
 "\n" {}
-";" {printf("FOUND ; "); return tPV;}
-"printf" {printf("FOUND PRINTF "); return tPRINT;}
-[0-9]+|[0-9]+e"-"?[0-9]+ {printf("FOUND NUMBER "); yylval.nb = atof(yytext); return tNB; }
-[a-zA-Z][_a-zA-Z0-9]* {printf("FOUND ID ");yylval.id=strdup(yytext); return tID;}
+";" {return tPV;}
+"printf" {return tPRINT;}
+[0-9]+|[0-9]+e"-"?[0-9]+ {yylval.nb = atof(yytext); return tNB; }
+[a-zA-Z][_a-zA-Z0-9]* {yylval.id=strdup(yytext); return tID;}

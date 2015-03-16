@@ -31,27 +31,20 @@ void replace_line(int num_line,int to,FILE *file){
     char chaine[TAILLE_MAX] = "";
     int indice_pi;
     int taille;
-    printf("Remplacement de ligne\n");
 
     FILE * fichier=fopen("./ass.ass", "r+");
 
 
     if (fichier !=NULL)
     {
-        printf("Le fichier existe et est ouvert\n");
 
     	while(fgets(chaine, TAILLE_MAX, fichier) != NULL)
     	{
-            printf("Parcours ligne par ligne\n");
     		num_ligne_courrante++;
-    		printf("%s",chaine );
     		if (num_ligne_courrante==num_line){
-    			printf("C'est la bonne ligne !\n");
     			indice_pi=trouver_indice(chaine);
     			taille=strlen(chaine);
     			fseek(fichier,-taille,SEEK_CUR);
-    			printf("indice du ? : %d\n",indice_pi);
-    			printf("Nouvelle chaine : %s",generer_chaine(to,chaine,indice_pi) );
     			fputs(generer_chaine(to,chaine,indice_pi),fichier);
     		}
     	}
