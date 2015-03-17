@@ -16,6 +16,7 @@
 "int" {return tINT;}
 "if" {return tIF;}
 "else" {return tELSE;}
+"while" {return tWHILE;}
 "+" {return tPLUS;}
 "-" {return tMOINS;}
 "*" {return tMUL;}

@@ -14,7 +14,7 @@
 {int nb; char *id;}
 
 	
-%token tMAIN tPO tPF tAO tAF tCONST tINT tPLUS tMOINS tMUL tDIV tEGAL tVIR tFL tPV tPRINT tLT tGT tIF tELSE
+%token tMAIN tPO tPF tAO tAF tCONST tINT tPLUS tMOINS tMUL tDIV tEGAL tVIR tFL tPV tPRINT tLT tGT tIF tELSE tWHILE
 %token <nb> tNB;
 %token <id> tID;
 //%type <id> ID;
@@ -89,6 +89,7 @@ Statement :
 	Affectation tPV {printf("Affectation is OK\n");}
 	|Printf tPV { printf("printf is OK\n");}
 	|If
+	|While
 	
 
 
@@ -178,6 +179,26 @@ Ifsimple:tIF tPO Condition tPF {
 
 Else:tELSE tAO Statementlist tAF {
 
+
+}
+
+While:tWHILE tPO Condition tPF{
+	fprintf(fic, "JMF %d ???\n",$3 );
+	nb_instructions_assembleur++;
+	add_jump(nb_instructions_assembleur,-1);
+} tAO Statementlist tAF{
+
+	update_jump(-1,nb_instructions_assembleur+2);
+	jump *j=(jump *)jump_pop();
+	//Saut inconditionel à la condition du while
+
+	fprintf(fic, "JMP %d\n",(j->from)-1);
+	nb_instructions_assembleur++;
+
+	//Mise à jour du saut dans le fichier avec la bonne valeur
+	fclose(fic);
+	replace_line(j->from,j->to,fic);
+	fopen("./ass.ass","a+");
 }
 
 
