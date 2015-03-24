@@ -8,23 +8,43 @@
 	int nb_instructions_assembleur=0; 
 
 %}
+
+
+/********************************************************/
+/*******************    TOKENS         ******************/
+/********************************************************/
+
+
 %union
 {int nb; char *id;}
 
 	
-%token tMAIN tPO tPF tAO tAF tCONST tINT tPLUS tMOINS tMUL tDIV tEGAL tVIR tFL tPV tPRINT tLT tGT tIF tELSE tWHILE
+%token tMAIN tPO tPF tAO tAF tCONST tINT tVIR tPV tPRINT tLT tGT 
+%token tPLUS tMOINS tMUL tDIV tEGAL
+%token tIF tELSE tWHILE
 %token <nb> tNB;
 %token <id> tID;
-//%type <id> ID;
+
+
 %type <id> AffectationDeclaration;
 %type <nb> Number;
 %type <nb> Condition;
+
 
 %right tEGAL 
 %left tPLUS tMOINS
 %left tMUL tDIV
 
+
+%start S
+
 %% 
+
+
+/********************************************************/
+/*******************     AXIOM         ******************/
+/********************************************************/
+
 
 S:tINT tMAIN tPO tPF tAO Declarationlist Statementlist tAF {
 	//printf("Main is OK\n");
@@ -34,6 +54,8 @@ S:tINT tMAIN tPO tPF tAO Declarationlist Statementlist tAF {
 	printf("Nombre d'instructions assembleur : %d\n",nb_instructions_assembleur);
 
 }
+
+
 
 
 /********************************************************/
@@ -46,6 +68,7 @@ Declarationlist :
 	|Declarationlist Declarations
 	|
 
+
 Declarations : 
 	Declaration tPV {printf("Declaration is OK\n");}
 	|tCONST tINT tID tEGAL Number tPV {printf("Constante is OK \n");insert($3,CONSTANT);}
@@ -56,9 +79,12 @@ Declaration : tINT tID {insert($2,NOT_INITIALISED);} // int i
 Declaration : tINT tID tEGAL Number{insert($2,INITIALISED);} // int i =5 | int i = 4+3;
 
 
+
+
 /********************************************************/
 /**********    DECLARATION MULTIPLES    *****************/
 /********************************************************/
+
 
 AffectationDeclaration : 
 	tID tEGAL Number {$$=$1;}
@@ -70,6 +96,7 @@ DMlist :
 	| AffectationDeclaration {insert($1,INITIALISED);}
 	| tID tVIR DMlist {insert($1,NOT_INITIALISED);}
 	| tID {insert($1,NOT_INITIALISED);}
+
 
 
 
@@ -93,27 +120,39 @@ Statement :
 
 
 
-
 /********************************************************/
 /*******************    AUTRES       ********************/
 /********************************************************/
 
 
 
-Affectation : 
-	tID tEGAL Number{if(get_state($1)==CONSTANT)printf("Erreur\n");change_state(INITIALISED,$1);}
+Affectation : tID tEGAL Number{
+				if(get_state($1)==CONSTANT) printf("Erreur\n"); 
+				change_state(INITIALISED,$1);
+}
+	
+	
+/********************************************************/
+/*******************     PRINT       ********************/
+/********************************************************/
+	
 
-Printf : tPRINT tPO tID tPF
-						{
-							int id = get_id_for_name($3);
-							if (id ==-1){
-								yyerror("La variable n'existe pas");
-							} else {
-								fprintf(fic, "PRI @%d\n",id);
-								nb_instructions_assembleur++;
-							}
+Printf : tPRINT tPO tID tPF{
+			int id = get_id_for_name($3);
+			if (id ==-1){
+				yyerror("La variable n'existe pas");
+			} else {
+				fprintf(fic, "PRI @%d\n",id);
+				nb_instructions_assembleur++;
+			}
+}
 
-						} // printf(i)
+
+
+/********************************************************/
+/*******************     PRINT       ********************/
+/********************************************************/
+
 
 //ID : tID {printf("variable : %s \n",$1);$$=$1;}
 
