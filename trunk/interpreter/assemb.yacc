@@ -1,14 +1,14 @@
 %{
 	
 	#include <stdio.h>
-	
+	#include "symb_tab.h"
 	
 %}
 
 %union
 {int nb;}
 
-%token tMOV tADD tMUL tSOU tDIV tCOP tAFC tJMP tJMF tINF tSUP tEQU tPRI
+%token tADD tMUL tSOU tDIV tCOP tAFC tJMP tJMF tINF tSUP tEQU tPRI
 %token <nb> tNB;
 
 %%
@@ -17,17 +17,17 @@
 Insts : Inst Insts
 		|Inst;
 		
-Inst : tADD tNB tNB //{mem[$2]=mem[$2]+mem[$3];}
-		|tMUL tNB tNB //{mem[$2]=mem[$2]*mem[$3];}
-		|tSOU tNB tNB //{mem[$2]=mem[$2]-mem[$3];}
-		|tDIV tNB tNB //{mem[$2]=mem[$2]/mem[$3];} 
+Inst : tADD tNB tNB tNB//{mem[$2]=mem[$2]+mem[$3];}
+		|tMUL tNB tNB tNB//{mem[$2]=mem[$2]*mem[$3];}
+		|tSOU tNB tNB tNB//{mem[$2]=mem[$2]-mem[$3];}
+		|tDIV tNB tNB tNB//{mem[$2]=mem[$2]/mem[$3];} 
 		|tCOP tNB tNB //{mem[$2]=mem[$3];}
 		|tAFC tNB tNB //{mem[$2]=mem[$3];}
 		|tJMP tNB {}
-		|tJMF tNB {}
-		|tINF tNB tNB //{$2<$3;} //comment stocker un boolean
-		|tSUP tNB tNB //{$2>$3;}
-		|tEQU tNB tNB //{$2==$3;}
+		|tJMF tNB tNB {}
+		|tINF tNB tNB tNB//{$2<$3;} //comment stocker un boolean
+		|tSUP tNB tNB tNB//{$2>$3;}
+		|tEQU tNB tNB tNB//{$2==$3;}
 		|tPRI tNB //{printf(mem($2));}
 
 

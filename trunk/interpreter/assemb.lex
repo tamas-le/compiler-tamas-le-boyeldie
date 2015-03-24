@@ -6,7 +6,6 @@
 
 %%
 
-"MOV" { printf("Found : MOV\n"); return tMOV;}
 "ADD" { printf("Found : ADD\n"); return tADD;}
 "MUL" { printf("Found : MUL\n"); return tMUL;}
 "SOU" { printf("Found : SOU\n"); return tSOU;}

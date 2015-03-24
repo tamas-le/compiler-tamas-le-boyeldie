@@ -4,8 +4,6 @@
 	#include "jumper/jump.h"
 	#include "ass_file/file_ass.h"
 
-	
-
 	FILE *fic;
 	int nb_instructions_assembleur=0; 
 
@@ -111,7 +109,7 @@ Printf : tPRINT tPO tID tPF
 							if (id ==-1){
 								yyerror("La variable n'existe pas");
 							} else {
-								fprintf(fic, "PRI %d\n",id);
+								fprintf(fic, "PRI @%d\n",id);
 								nb_instructions_assembleur++;
 							}
 
@@ -120,13 +118,13 @@ Printf : tPRINT tPO tID tPF
 //ID : tID {printf("variable : %s \n",$1);$$=$1;}
 
 Number : 
-	Number tPLUS Number {fprintf(fic,"ADD %d %d %d\n", $1, $1, $3);symb_pop(); $$=$1;nb_instructions_assembleur++;}
-	|Number tMOINS Number {fprintf(fic,"SOU %d %d %d\n", $1, $1, $3);symb_pop(); $$=$1;nb_instructions_assembleur++;}
-	|Number tMUL Number {fprintf(fic,"MUL %d %d %d\n", $1, $1, $3);symb_pop(); $$=$1;nb_instructions_assembleur++;}
-	|Number tDIV Number {fprintf(fic,"DIV %d %d %d\n", $1, $1, $3);symb_pop(); $$=$1;nb_instructions_assembleur++;}// (4*5)+5
+	Number tPLUS Number {fprintf(fic,"ADD @%d @%d @%d\n", $1, $1, $3);symb_pop(); $$=$1;nb_instructions_assembleur++;}
+	|Number tMOINS Number {fprintf(fic,"SOU @%d @%d @%d\n", $1, $1, $3);symb_pop(); $$=$1;nb_instructions_assembleur++;}
+	|Number tMUL Number {fprintf(fic,"MUL @%d @%d @%d\n", $1, $1, $3);symb_pop(); $$=$1;nb_instructions_assembleur++;}
+	|Number tDIV Number {fprintf(fic,"DIV @%d @%d @%d\n", $1, $1, $3);symb_pop(); $$=$1;nb_instructions_assembleur++;}// (4*5)+5
 	|tPO Number tPF {$$=$2;}// (4)
-	|tNB {printf("value : %d \n",$1);int adr=insert(" ",TMP); fprintf(fic,"AFC %d %d\n",adr,$1);$$=adr;nb_instructions_assembleur++;}   // 4
-	|tID {int adr=get_id_for_name($1);int tmp=insert(" ",TMP);fprintf(fic,"COP %d %d \n",tmp,adr);$$=adr;nb_instructions_assembleur++;} //toto
+	|tNB {printf("value : %d \n",$1);int adr=insert(" ",TMP); fprintf(fic,"AFC @%d %d\n",adr,$1);$$=adr;nb_instructions_assembleur++;}   // 4
+	|tID {int adr=get_id_for_name($1);int tmp=insert(" ",TMP);fprintf(fic,"COP @%d @%d \n",tmp,adr);$$=adr;nb_instructions_assembleur++;} //toto
 
 
 
@@ -155,7 +153,7 @@ If :Ifsimple{
 
 
 Ifsimple:tIF tPO Condition tPF {
-		fprintf(fic, "JMF %d ???\n",$3 );
+		fprintf(fic, "JMF @%d ???\n",$3 );
 		nb_instructions_assembleur++;
 		add_jump(nb_instructions_assembleur,-1);
 		} 
@@ -183,7 +181,7 @@ Else:tELSE tAO Statementlist tAF {
 }
 
 While:tWHILE tPO Condition tPF{
-	fprintf(fic, "JMF %d ???\n",$3 );
+	fprintf(fic, "JMF @%d ???\n",$3 );
 	nb_instructions_assembleur++;
 	add_jump(nb_instructions_assembleur,-1);
 } tAO Statementlist tAF{
@@ -206,21 +204,21 @@ While:tWHILE tPO Condition tPF{
 Condition : 
 	Number tLT Number 
 					{
-						fprintf(fic,"INF %d %d %d\n",$1,$1,$3);
+						fprintf(fic,"INF @%d @%d @%d\n",$1,$1,$3);
 						nb_instructions_assembleur++;
 						symb_pop();
 						$$=$1;
 					}
 	|Number tGT Number
 					{
-						fprintf(fic,"SUP %d %d %d\n",$1,$1,$3);
+						fprintf(fic,"SUP @%d @%d @%d\n",$1,$1,$3);
 						nb_instructions_assembleur++;
 						symb_pop();
 						$$=$1;
 					}  
 	|Number tEGAL tEGAL Number
 					{
-						fprintf(fic,"EQU %d %d %d\n",$1,$1,$4);
+						fprintf(fic,"EQU @%d @%d @%d\n",$1,$1,$4);
 						nb_instructions_assembleur++;
 						symb_pop();
 						$$=$1;
