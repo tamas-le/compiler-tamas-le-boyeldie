@@ -19,3 +19,9 @@
 "EQU" { printf("Found : EQU\n"); return tEQU;}
 "PRI" { printf("Found : PRI\n"); return tPRI;}
 [0-9]+ {yylval.nb = atof(yytext); return tNB;}
+" " {}
+"	" {}
+"\n" {printf("Found : FIN\n");}
+"@" {printf("Found @\n" ); return taro;}
+";" {printf("Found ;\n"); return tPV;}
+([_a-zA-Z0-9 ])* {yylval.id=strdup(yytext); return tTEXT;}
