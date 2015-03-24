@@ -150,7 +150,7 @@ Printf : tPRINT tPO tID tPF{
 
 
 /********************************************************/
-/*******************     PRINT       ********************/
+/*******************   OPERATIONS    ********************/
 /********************************************************/
 
 
@@ -158,20 +158,27 @@ Printf : tPRINT tPO tID tPF{
 
 Number : 
 	Number tPLUS Number {fprintf(fic,"ADD @%d @%d @%d\n", $1, $1, $3);symb_pop(); $$=$1;nb_instructions_assembleur++;}
+	
 	|Number tMOINS Number {fprintf(fic,"SOU @%d @%d @%d\n", $1, $1, $3);symb_pop(); $$=$1;nb_instructions_assembleur++;}
+	
 	|Number tMUL Number {fprintf(fic,"MUL @%d @%d @%d\n", $1, $1, $3);symb_pop(); $$=$1;nb_instructions_assembleur++;}
-	|Number tDIV Number {fprintf(fic,"DIV @%d @%d @%d\n", $1, $1, $3);symb_pop(); $$=$1;nb_instructions_assembleur++;}// (4*5)+5
-	|tPO Number tPF {$$=$2;}// (4)
-	|tNB {printf("value : %d \n",$1);int adr=insert(" ",TMP); fprintf(fic,"AFC @%d %d\n",adr,$1);$$=adr;nb_instructions_assembleur++;}   // 4
+	
+	|Number tDIV Number {fprintf(fic,"DIV @%d @%d @%d\n", $1, $1, $3);symb_pop(); $$=$1;nb_instructions_assembleur++;} //(4*5)+5
+	
+	|tPO Number tPF {$$=$2;} //(4)
+	
+	|tNB {printf("value : %d \n",$1);int adr=insert(" ",TMP); fprintf(fic,"AFC @%d %d\n",adr,$1);$$=adr;nb_instructions_assembleur++;} // 4
+	
 	|tID {int adr=get_id_for_name($1);int tmp=insert(" ",TMP);fprintf(fic,"COP @%d @%d \n",tmp,adr);$$=adr;nb_instructions_assembleur++;} //toto
 
 
 
 /********************************************************/
-/*******************  CONDITIONS     ********************/
+/*******************       IF        ********************/
 /********************************************************/
 
 If :Ifsimple{
+	
 	printf("Ya pas de else\n");
 	update_jump(-1,nb_instructions_assembleur+1);
 	jump *j=(jump *)jump_pop();
@@ -179,8 +186,8 @@ If :Ifsimple{
 	fclose(fic);
 	replace_line(j->from,j->to,fic);
 	fopen("./ass.ass","a+");
-
 	}
+	
 	|Ifsimple Else{
 		printf("Ya un else !\n");
 		update_jump(-1,nb_instructions_assembleur+1);
@@ -214,30 +221,40 @@ Ifsimple:tIF tPO Condition tPF {
 		fopen("./ass.ass","a+");	
 	}
 
-Else:tELSE tAO Statementlist tAF {
+Else:tELSE tAO Statementlist tAF {}
 
 
-}
 
-While:tWHILE tPO Condition tPF{
-	fprintf(fic, "JMF @%d ???\n",$3 );
-	nb_instructions_assembleur++;
-	add_jump(nb_instructions_assembleur,-1);
-} tAO Statementlist tAF{
 
-	update_jump(-1,nb_instructions_assembleur+2);
-	jump *j=(jump *)jump_pop();
-	//Saut inconditionel à la condition du while
+/********************************************************/
+/*******************      WHILE      ********************/
+/********************************************************/
 
-	fprintf(fic, "JMP %d\n",(j->from)-1);
-	nb_instructions_assembleur++;
 
-	//Mise à jour du saut dans le fichier avec la bonne valeur
-	fclose(fic);
-	replace_line(j->from,j->to,fic);
-	fopen("./ass.ass","a+");
-}
+While: tWHILE tPO Condition tPF{
+							fprintf(fic, "JMF @%d ???\n",$3 );
+							nb_instructions_assembleur++;
+							add_jump(nb_instructions_assembleur,-1);
+								
+		} tAO Statementlist tAF {
+							update_jump(-1,nb_instructions_assembleur+2);
+							jump *j=(jump *)jump_pop();
+							//Saut inconditionel à la condition du while
 
+							fprintf(fic, "JMP %d\n",(j->from)-1);
+							nb_instructions_assembleur++;
+
+							//Mise à jour du saut dans le fichier avec la bonne valeur
+							fclose(fic);
+							replace_line(j->from,j->to,fic);
+							fopen("./ass.ass","a+");
+		}
+
+
+
+/********************************************************/
+/******************* CONDITION POUR IF ET WHILE ********************/
+/********************************************************/
 
 
 Condition : 
