@@ -10,28 +10,37 @@
 %union
 {int nb; char *id;}
 
-%token tADD tMUL tSOU tDIV tCOP tAFC tJMP tJMF tINF tSUP tEQU tPRI
-%token taro;
-%token tPV;
+	
+%token tMAIN tPO tPF tAO tAF tCONST tINT tVIR tPV tPRINT tLT tGT 
+%token tPLUS tMOINS tMUL tDIV tEGAL
+%token tIF tELSE tWHILE
+
+%token tAFC tADD
+
+%token taro
 
 %token <nb> tNB;
-%token <id> tTEXT;
+%token <id> tID;
 
-%start Insts
+
+
+%start S
 
 %%
 
 
-Insts : Inst Insts
-		|Inst
-		|
 
-Inst : 
-	tAFC tTEXT
+S: Instructions  {printf("Main is OK\n");}
+
+Instructions : Instructions Instruction
+			| Instruction
+			|
+
+
+Instruction : tAFC  Adresse tNB {printf("Nb :%d \n",$3);}
+			| tADD Adresse Adresse {printf("Oui l'addition\n");}
 
 Adresse : taro tNB {printf("Adresse : %d\n",$2 );}
-
-//Commentaire : tPV tTEXT {printf("Ceci est un Commentaire : %s\n",$2);}
 
 
 
@@ -67,10 +76,11 @@ Adresse : taro tNB {printf("Adresse : %d\n",$2 );}
 %%
 
 int main(){
+	printf("Début du programme d'interpretation\n");
 	init_list();
 	return yyparse();	
 }
 
 yyerror(char *s){
-		
+	fprintf(stderr, "%s\n", s);
 }
