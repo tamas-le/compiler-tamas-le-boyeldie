@@ -1,3 +1,4 @@
 AFC @1 5
+AFC @2 3
 PRI @1
-COP @2 @1
+ADD @1 @1 @2

@@ -5,7 +5,8 @@ compiler: assemb.lex assemb.yacc
 	gcc -c lex.yy.c
 	gcc -c ../list/list.c
 	gcc -c list_interpreter.c
-	gcc  list.o list_interpreter.o y.tab.o lex.yy.o -ll -o interpreter
+	gcc -c action.c
+	gcc  action.o list.o list_interpreter.o y.tab.o lex.yy.o -ll -o interpreter
 	
 test: interpreter
 	./interpreter < assemb.s
