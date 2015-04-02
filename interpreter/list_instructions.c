@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../list/list.h"
+#include "action.h"
 
 
 llist * list_inst;
@@ -31,20 +32,59 @@ void add_instruction(int num_ligne,type_action action,int arg1,int arg2,int arg3
 }
 
 void go(){
+	init_list();
 	list_node *aux=list_inst->node;
 	instruction *instruction_courante;
-	int i=1;
+
 	while(aux!=NULL){
 		instruction_courante=(instruction *)aux->data;
-		display_instruction(aux);
-		printf("%d\n",i++);
+		run_instruction(instruction_courante);
 		aux=aux->next;
 	}
-
+	printlist();
+	destroylist();
 }
 
 void run_instruction(instruction *i){
 	
+	switch(i->action){
+		case ADD:
+		op(i->arg[0],i->arg[1],i->arg[2],PLUS);
+		break;
+		case MUL:
+		op(i->arg[0],i->arg[1],i->arg[2],FOIS);
+		break;
+		case SOU:
+		op(i->arg[0],i->arg[1],i->arg[2],MOINS);
+		break;
+		case DIV:
+		op(i->arg[0],i->arg[1],i->arg[2],PAR);
+		break;
+		case COP:
+		copy(i->arg[0],i->arg[1]);
+		break;
+		case AFC:
+		afc(i->arg[0],i->arg[1]);
+		break;
+		case JMP:
+
+		break;
+		case JMF:
+
+		break;
+		case INF:
+		op(i->arg[0],i->arg[1],i->arg[2],PP);
+		break;
+		case SUP:
+		op(i->arg[0],i->arg[1],i->arg[2],PG);
+		break;
+		case EQU:
+		op(i->arg[0],i->arg[1],i->arg[2],EG);
+		break;
+		case PRI:
+		pri(i->arg[0]);
+		break;
+	}
 }
 
 void destroy_list_inst(){
@@ -57,7 +97,7 @@ void print_list_instruction(){
 
 
 
-int main(int argc, char const *argv[])
+/*int main(int argc, char const *argv[])
 {
 	printf("Test de la liste des instructions\n");
 	init_list_instruction();
@@ -70,4 +110,4 @@ int main(int argc, char const *argv[])
 	
 
 	return 0;
-}
+}*/

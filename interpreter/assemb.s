@@ -1,4 +1,10 @@
 AFC @1 5
 AFC @2 3
+AFC @3 4
 PRI @1
-ADD @1 @1 @2
+PRI @2
+PRI @3
+ADD @1 @2 @3
+PRI @1
+SUP @1 @2 @3
+PRI @1
