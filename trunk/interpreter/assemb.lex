@@ -8,6 +8,16 @@
 %%
 "AFC" {return tAFC;}
 "ADD" {return tADD;}
+"MUL" {return tMUL;}
+"SOU" {return tSOU;}
+"DIV" {return tDIV;}
+"COP" {return tCOP;}
+"JMP" {return tJMP;}
+"JMF" {return tJMF;}
+"INF" {return tINF;}
+"SUP" {return tSUP;}
+"EQU" {return tEQU;}
+"PRI" {return tPRI;}
 "@" {return taro;}
 " " {}
 "	" {}
