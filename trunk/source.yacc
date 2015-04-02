@@ -303,8 +303,6 @@ Condition :
 int main() {
 	// initialisation du fichier
 	fic=fopen("./ass.ass", "w+");
-	fprintf(fic, ";Assembleur généré par les duocodeurs\n");
-	nb_instructions_assembleur++;
 	//initialisation des tables symboles et saut
 	init_table();
 	init_jump();
