@@ -48,11 +48,14 @@
 
 S:tINT tMAIN tPO tPF tAO Declarationlist Statementlist tAF {
 	//printf("Main is OK\n");
-	//print_tab_symb();
+	print_tab_symb();
 
 	fclose(fic);
 	printf("Nombre d'instructions assembleur : %d\n",nb_instructions_assembleur);
 
+	destroy_table();
+	destroy_jump_table();
+	print_tab_symb();
 }
 
 

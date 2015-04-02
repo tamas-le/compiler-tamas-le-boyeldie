@@ -24,5 +24,6 @@ jump * jump_pop();
 
 
 void print_jump();
+void destroy_jump_table();
 
 #endif

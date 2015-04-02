@@ -49,6 +49,10 @@ void print_jump(){
 	print_list(table_des_jump);
 }
 
+void destroy_jump_table(){
+	list_destroy(table_des_jump);
+}
+
 /*int main(int argc, char const *argv[])
 {
 	init_jump();
