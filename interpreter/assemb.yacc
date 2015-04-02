@@ -41,6 +41,16 @@
 		}
 
 	}
+
+	void pri(int arg){
+		cellule *c=get_value(arg);
+		printf("PRI : %d\n",c->value);
+	}
+
+	void copy(int arg1, int arg2){
+		cellule*c2=get_value(arg2);
+		update_list(c2->value,arg1);
+	}
 	
 %}
 
@@ -67,7 +77,7 @@
 
 
 
-S: Instructions  {printf("Assembleur qui régale\n"); printlist();}
+S: Instructions  {printf("Assembleur qui régale\n"); printlist();destroylist();}
 
 Instructions : Instructions Instruction {num_ligne++;printf("ligne :%d\n",num_ligne);}
 			| Instruction {num_ligne++;printf("ligne :%d\n",num_ligne);}
@@ -80,23 +90,11 @@ Instruction : tAFC Adresse tNB {add_to_list($3,$2);}
 			| tSOU Adresse Adresse Adresse{op($2,$3,$4,MOINS);}
 			| tDIV Adresse Adresse Adresse{op($2,$3,$4,DIV);}
 			| tCOP Adresse Adresse {
-							cellule *c1=get_value($2), *c2=get_value($3);
-							update_list(c2->value,c1->id);
+							copy($2,$3);
 			}
 
 
 			| tJMP tNB {
-				int ma_ligne = num_ligne+1;
-				int saut = $2;
-				printf("Ma ligne %d \n",ma_ligne);
-				if (saut>ma_ligne){
-
-				} else if (ma_ligne>saut){
-
-				} else{
-					printf("Boucle infinie\n");
-				}
-
 
 			} 
 			| tJMF Adresse tNB {printf("Oui le jump conditionnel\n");}
@@ -106,8 +104,7 @@ Instruction : tAFC Adresse tNB {add_to_list($3,$2);}
 			| tEQU Adresse Adresse Adresse {op($2,$3,$4,EQU);}
 
 			| tPRI Adresse {
-						cellule *c=get_value($2);
-						printf("PRI : %d\n",c->value);
+						pri($2);
 					}
 
 Adresse : taro tNB {/*printf("Adresse : %d\n",$2 );*/$$=$2;}
