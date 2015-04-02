@@ -41,11 +41,11 @@ void go(){
 		instruction_courante=(instruction *)aux->data;
 		if (instruction_courante->action==JMP ){
 			aux=find_instruction(instruction_courante->arg[0]);
-
-
 		} else if (instruction_courante->action==JMF){
 			if (evaluate(instruction_courante->arg[0])){
 				aux=find_instruction(instruction_courante->arg[1]);
+			} else {
+				aux=aux->next;
 			}
 		}
 		else {

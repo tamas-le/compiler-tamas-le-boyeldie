@@ -184,7 +184,7 @@ Number :
 	
 	|tNB {printf("value : %d \n",$1);int adr=insert(" ",TMP); fprintf(fic,"AFC @%d %d\n",adr,$1);$$=adr;nb_instructions_assembleur++;} // 4
 	
-	|tID {int adr=get_id_for_name($1);int tmp=insert(" ",TMP);fprintf(fic,"COP @%d @%d \n",tmp,adr);$$=tmp;nb_instructions_assembleur++;} //toto
+	|tID {int adr=get_id_for_name($1);/*int tmp=insert(" ",TMP);fprintf(fic,"COP @%d @%d \n",tmp,adr);*/$$=adr;/*nb_instructions_assembleur++;*/} //toto
 
 
 
