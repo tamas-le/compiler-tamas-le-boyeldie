@@ -14,6 +14,8 @@ void copy(int arg1, int arg2);
 
 void afc(int adr,int val);
 
+int evaluate(int adr);
+
 
 #endif
 

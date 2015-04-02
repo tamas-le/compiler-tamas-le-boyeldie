@@ -35,11 +35,24 @@ void go(){
 	init_list();
 	list_node *aux=list_inst->node;
 	instruction *instruction_courante;
+	int line;
 
 	while(aux!=NULL){
 		instruction_courante=(instruction *)aux->data;
-		run_instruction(instruction_courante);
-		aux=aux->next;
+		if (instruction_courante->action==JMP ){
+			aux=find_instruction(instruction_courante->arg[0]);
+
+
+		} else if (instruction_courante->action==JMF){
+			if (evaluate(instruction_courante->arg[0])){
+				aux=find_instruction(instruction_courante->arg[1]);
+			}
+		}
+		else {
+			run_instruction(instruction_courante);
+			aux=aux->next;
+		}
+
 	}
 	printlist();
 	destroylist();
@@ -94,6 +107,23 @@ void destroy_list_inst(){
 void print_list_instruction(){
 	print_list(list_inst);
 }
+
+list_node *find_instruction(int ligne){
+	list_node *aux=list_inst->node;
+	instruction *instruction_courante;
+
+	while (aux!=NULL){
+		instruction_courante=(instruction *)aux->data;
+		if (instruction_courante->num_ligne==ligne){
+			return aux;
+		}else {
+			aux = aux->next;
+		}
+		
+	}
+	return NULL;
+}
+
 
 
 
