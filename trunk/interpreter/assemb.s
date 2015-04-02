@@ -1,10 +1,12 @@
-AFC @1 5
-AFC @2 3
-AFC @3 4
-PRI @1
+AFC @1 0
+COP @2 @1
+COP @3 @2 
+AFC @4 5
+EQU @3 @3 @4
+JMF @3 13 
 PRI @2
-PRI @3
-ADD @1 @2 @3
-PRI @1
-SUP @1 @2 @3
-PRI @1
+COP @5 @2 
+AFC @6 1
+ADD @5 @5 @6
+COP @2 @5 
+JMP 5

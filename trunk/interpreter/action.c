@@ -48,3 +48,11 @@ void op(int adr_resultat,int adr_op1,int adr_op2,operator op){
 	void afc(int adr,int val){
 		add_to_list(val,adr);
 	}
+
+	int evaluate(int adr){
+		cellule *c=get_value(adr);
+		if (c->value==0){
+			return 1;
+		}
+		return 0;
+	}

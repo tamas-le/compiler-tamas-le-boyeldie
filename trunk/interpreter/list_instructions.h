@@ -29,6 +29,8 @@ void destroy_list_inst();
 
 void print_list_instruction();
 
+list_node *find_instruction(int ligne);
+
 
 
 #endif

@@ -73,9 +73,11 @@ Instruction : tAFC Adresse tNB {
 
 
 			| tJMP tNB {
-
+				add_instruction(num_ligne,JMP,$2,0,0);
 			} 
-			| tJMF Adresse tNB {printf("Oui le jump conditionnel\n");}
+			| tJMF Adresse tNB {
+				add_instruction(num_ligne,JMF,$2,$3,0);
+			}
 
 			| tINF Adresse Adresse Adresse{
 				add_instruction(num_ligne,INF,$2,$3,$4);
