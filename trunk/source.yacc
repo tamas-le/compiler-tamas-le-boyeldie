@@ -76,7 +76,11 @@ Declarations :
 
 
 Declaration : tINT tID {insert($2,NOT_INITIALISED);} // int i
-Declaration : tINT tID tEGAL Number{insert($2,INITIALISED);} // int i =5 | int i = 4+3;
+Declaration : tINT tID tEGAL Number{
+					int adr=insert($2,INITIALISED);
+					fprintf(fic, "COP @%d @%d\n",adr,$4); 
+					nb_instructions_assembleur++;
+				} 
 
 
 
@@ -87,13 +91,18 @@ Declaration : tINT tID tEGAL Number{insert($2,INITIALISED);} // int i =5 | int i
 
 
 AffectationDeclaration : 
-	tID tEGAL Number {$$=$1;}
+	tID tEGAL Number {
+		$$=$1;
+		int adr=insert($1,INITIALISED);
+		fprintf(fic, "COP @%d @%d\n",adr,$3);
+		nb_instructions_assembleur++;
+	}
 
 DeclarationMultiples : tINT DMlist
 
 DMlist : 
-	AffectationDeclaration tVIR DMlist {insert($1,INITIALISED);}
-	| AffectationDeclaration {insert($1,INITIALISED);}
+	AffectationDeclaration tVIR DMlist 
+	| AffectationDeclaration 
 	| tID tVIR DMlist {insert($1,NOT_INITIALISED);}
 	| tID {insert($1,NOT_INITIALISED);}
 
@@ -129,6 +138,9 @@ Statement :
 Affectation : tID tEGAL Number{
 				if(get_state($1)==CONSTANT) printf("Erreur\n"); 
 				change_state(INITIALISED,$1);
+				int adr=get_id_for_name($1);
+				fprintf(fic,"COP @%d @%d \n",adr,$3);
+				nb_instructions_assembleur++;
 }
 	
 	
@@ -169,7 +181,7 @@ Number :
 	
 	|tNB {printf("value : %d \n",$1);int adr=insert(" ",TMP); fprintf(fic,"AFC @%d %d\n",adr,$1);$$=adr;nb_instructions_assembleur++;} // 4
 	
-	|tID {int adr=get_id_for_name($1);int tmp=insert(" ",TMP);fprintf(fic,"COP @%d @%d \n",tmp,adr);$$=adr;nb_instructions_assembleur++;} //toto
+	|tID {int adr=get_id_for_name($1);int tmp=insert(" ",TMP);fprintf(fic,"COP @%d @%d \n",tmp,adr);$$=tmp;nb_instructions_assembleur++;} //toto
 
 
 
