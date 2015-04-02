@@ -3,11 +3,12 @@
 	#include <stdio.h>
 	#include "list_interpreter.h"
 	#include "action.h"
+	#include "list_instructions.h"
 	
 	
 
 	int jumper=0;
-	int num_ligne=0;
+	int num_ligne=1;
 
 	
 	
@@ -36,20 +37,38 @@
 
 
 
-S: Instructions  {printf("Assembleur qui régale\n"); printlist();destroylist();}
+S: Instructions  {printf("Assembleur qui régale\n");print_list_instruction();go();destroy_list_inst();}
 
 Instructions : Instructions Instruction {num_ligne++;printf("ligne :%d\n",num_ligne);}
 			| Instruction {num_ligne++;printf("ligne :%d\n",num_ligne);}
 			|
 
 
-Instruction : tAFC Adresse tNB {add_to_list($3,$2);}
-			| tADD Adresse Adresse Adresse {op($2,$3,$4,PLUS);}
-			| tMUL Adresse Adresse Adresse{ op($2,$3,$4,MUL);}
-			| tSOU Adresse Adresse Adresse{op($2,$3,$4,MOINS);}
-			| tDIV Adresse Adresse Adresse{op($2,$3,$4,DIV);}
+//add_instruction(int num_ligne,type_action action,int arg1,int arg2,int arg3)
+
+Instruction : tAFC Adresse tNB {
+	add_instruction(num_ligne,AFC,$2,$3,0);
+	//add_to_list($3,$2);
+	}
+			| tADD Adresse Adresse Adresse {
+				add_instruction(num_ligne,ADD,$2,$3,$4);
+				//op($2,$3,$4,PLUS)
+			}
+			| tMUL Adresse Adresse Adresse{ 
+				add_instruction(num_ligne,MUL,$2,$3,$4);
+				//op($2,$3,$4,FOIS);
+			}
+			| tSOU Adresse Adresse Adresse{
+				add_instruction(num_ligne,SOU,$2,$3,$4);
+				//op($2,$3,$4,MOINS);
+			}
+			| tDIV Adresse Adresse Adresse{
+				add_instruction(num_ligne,DIV,$2,$3,$4);
+				//op($2,$3,$4,PAR);
+			}
 			| tCOP Adresse Adresse {
-							copy($2,$3);
+				add_instruction(num_ligne,COP,$2,$3,0);
+				//copy($2,$3);
 			}
 
 
@@ -58,12 +77,21 @@ Instruction : tAFC Adresse tNB {add_to_list($3,$2);}
 			} 
 			| tJMF Adresse tNB {printf("Oui le jump conditionnel\n");}
 
-			| tINF Adresse Adresse Adresse{op($2,$3,$4,INF);}
-			| tSUP Adresse Adresse Adresse {op($2,$3,$4,SUP);}
-			| tEQU Adresse Adresse Adresse {op($2,$3,$4,EQU);}
-
+			| tINF Adresse Adresse Adresse{
+				add_instruction(num_ligne,INF,$2,$3,$4);
+				//op($2,$3,$4,PP);
+			}
+			| tSUP Adresse Adresse Adresse {
+				add_instruction(num_ligne,SUP,$2,$3,$4);
+				//op($2,$3,$4,PG);
+			}
+			| tEQU Adresse Adresse Adresse {
+				add_instruction(num_ligne,EQU,$2,$3,$4);
+				//op($2,$3,$4,EG);
+			}
 			| tPRI Adresse {
-						pri($2);
+						add_instruction(num_ligne,PRI,$2,0,0);
+						//pri($2);
 					}
 
 Adresse : taro tNB {/*printf("Adresse : %d\n",$2 );*/$$=$2;}
@@ -103,7 +131,7 @@ Adresse : taro tNB {/*printf("Adresse : %d\n",$2 );*/$$=$2;}
 
 int main(){
 	printf("Début du programme d'interpretation\n");
-	init_list();
+	init_list_instruction();
 	return yyparse();	
 }
 

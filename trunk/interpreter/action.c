@@ -15,19 +15,19 @@ void op(int adr_resultat,int adr_op1,int adr_op2,operator op){
 			case MOINS:
 			update_list(operande1-operande2,adr_resultat);
 			break;
-			case MUL:
+			case FOIS:
 			update_list(operande1*operande2,adr_resultat);
 			break;
-			case DIV:
+			case PAR:
 			update_list(operande1/operande2,adr_resultat);
 			break;
-			case INF:
+			case PP:
 			update_list(operande1<operande2,adr_resultat);
 			break;
-			case SUP:
+			case PG:
 			update_list(operande1>operande2,adr_resultat);
 			break;
-			case EQU:
+			case EG:
 			update_list(operande1==operande2,adr_resultat);
 			break;
 
@@ -43,4 +43,8 @@ void op(int adr_resultat,int adr_op1,int adr_op2,operator op){
 	void copy(int arg1, int arg2){
 		cellule*c2=get_value(arg2);
 		update_list(c2->value,arg1);
+	}
+
+	void afc(int adr,int val){
+		add_to_list(val,adr);
 	}
