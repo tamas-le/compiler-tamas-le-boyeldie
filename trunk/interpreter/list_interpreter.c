@@ -62,6 +62,10 @@ void printlist(){
 	print_list(list);
 }
 
+void destroylist(){
+	list_destroy(list);
+}
+
 /*int main(int argc, char const *argv[])
 {
 	int id=0;

@@ -22,6 +22,8 @@ cellule * get_value(int id);
 
 void printlist();
 
+void destroylist();
+
 #endif
 
 
