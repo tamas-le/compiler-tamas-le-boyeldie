@@ -23,7 +23,6 @@ llist* list_create(int (*CmpFunc)(list_node*,void*),void (*DpyFunc)(list_node*))
  */
 void list_destroy(llist *l)
 {
-	if (l) return;
 	while (l->node != NULL) {
 		list_pop(l);
 	}

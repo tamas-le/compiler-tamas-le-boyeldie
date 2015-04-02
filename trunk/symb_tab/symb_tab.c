@@ -164,7 +164,7 @@ void print_tab_symb(){
 }
 
 void destroy_table(){
-	
+	list_destroy(table_des_symboles);
 }
 
 
