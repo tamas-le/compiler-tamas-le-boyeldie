@@ -1,9 +1,8 @@
 
 int main() {
-	int i=0;
-	if (i==1){
-		i=1+2;
-	} else {
-		i=0;
+	int i=4;
+	int j=0;
+	if (i==4){
+		printf(j);
 	}
 }
