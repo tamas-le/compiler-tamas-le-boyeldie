@@ -69,7 +69,7 @@ S:tINT tMAIN tPO tPF tAO Declarationlist Statementlist tAF {
 
 Declarationlist : 
 	Declarations
-	|Declarationlist Declarations
+	|Declarations Declarationlist 
 	|
 
 
@@ -122,7 +122,7 @@ DMlist :
 
 Statementlist : 
 	Statement  
-   	|Statementlist Statement 
+   	|Statement Statementlist 
    	|
 
 Statement : 
