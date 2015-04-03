@@ -41,20 +41,20 @@ void replace_line(int num_line,int to,FILE *file){
 
     if (fichier !=NULL)
     {
-        printf("Le changement sera ligne : %d\n",num_line);
+       // printf("Le changement sera ligne : %d\n",num_line);
 
     	while(fgets(chaine, TAILLE_MAX, fichier) != NULL)
     	{
     		num_ligne_courrante++;
             
     		if (num_ligne_courrante==num_line){
-                printf("Chaine à modifier :%s\n",chaine);
+                //printf("Chaine à modifier :%s\n",chaine);
     			indice_pi=trouver_indice(chaine);
-                printf("Indice : %d\n",indice_pi );
+               // printf("Indice : %d\n",indice_pi );
     			taille=strlen(chaine);
     			fseek(fichier,-taille,SEEK_CUR);
                 chaine_2=generer_chaine(to,chaine,indice_pi);
-                printf("Chaine générée : %s\n",chaine_2);
+                //printf("Chaine générée : %s\n",chaine_2);
     			fputs(generer_chaine(to,chaine,indice_pi),fichier);
     		}
     	}
@@ -97,7 +97,6 @@ char * generer_chaine(int to,char * chaine_depart,int indice){
         padding[0]=' ';
         break;
     }
-    printf("chaine depart : %s \n",chaine_depart);
 	sprintf(resultat,"%s%d%s",chaine_depart,to,padding);
 	return resultat;
 }

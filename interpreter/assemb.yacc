@@ -1,9 +1,9 @@
 %{
 	
 	#include <stdio.h>
-	#include "list_interpreter.h"
-	#include "action.h"
-	#include "list_instructions.h"
+	#include "pile/list_interpreter.h"
+	#include "action/action.h"
+	#include "prog/list_instructions.h"
 	
 	
 
