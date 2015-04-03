@@ -27,7 +27,7 @@
 " " {}
 "	" {}
 "," {return tVIR;}
-"\n" {}
+"\n" {yylineno = yylineno + 1;}
 ";" {return tPV;}
 "printf" {return tPRINT;}
 [0-9]+|[0-9]+e"-"?[0-9]+ {yylval.nb = atof(yytext); return tNB; }

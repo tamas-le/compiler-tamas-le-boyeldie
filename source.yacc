@@ -5,8 +5,9 @@
 	#include "ass_file/file_ass.h"
 
 	FILE *fic;
-	int nb_instructions_assembleur=0; 
-
+	int nb_instructions_assembleur=0;
+	extern int yylineno;
+	extern char * yytext;
 %}
 
 
@@ -141,9 +142,13 @@ Statement :
 
 
 Affectation : tID tEGAL Number{
-				if(get_state($1)==CONSTANT) printf("Erreur\n"); 
-				change_state(INITIALISED,$1);
+				if(get_state($1)==CONSTANT) yyerror("Une constante ne peut pas être affectée"); 
+				
 				int adr=get_id_for_name($1);
+				if (adr ==-1){
+					yyerror("La variable n'a pas été déclarée");
+				}
+				change_state(INITIALISED,$1);
 				fprintf(fic,"COP @%d @%d \n",adr,$3);
 				symb_pop();
 				nb_instructions_assembleur++;
@@ -317,7 +322,8 @@ int main() {
 
 
 yyerror(char *s){
-	fprintf(stderr, "%s\n", s);
+	printf("%d : %s %s\n", yylineno, s, yytext );
+	printf("Erreur de syntaxe !!!!\n");
 }
 
 
