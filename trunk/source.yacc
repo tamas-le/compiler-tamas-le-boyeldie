@@ -80,8 +80,9 @@ Declarations :
 
 Declaration : tINT tID {insert($2,NOT_INITIALISED);} // int i
 Declaration : tINT tID tEGAL Number{
+					symb_pop();
 					int adr=insert($2,INITIALISED);
-					fprintf(fic, "COP @%d @%d\n",adr,$4); 
+					fprintf(fic, "COP @%d @%d\n",adr,$4);
 					nb_instructions_assembleur++;
 				} 
 
@@ -96,6 +97,7 @@ Declaration : tINT tID tEGAL Number{
 AffectationDeclaration : 
 	tID tEGAL Number {
 		$$=$1;
+		symb_pop();
 		int adr=insert($1,INITIALISED);
 		fprintf(fic, "COP @%d @%d\n",adr,$3);
 		nb_instructions_assembleur++;
@@ -143,6 +145,7 @@ Affectation : tID tEGAL Number{
 				change_state(INITIALISED,$1);
 				int adr=get_id_for_name($1);
 				fprintf(fic,"COP @%d @%d \n",adr,$3);
+				symb_pop();
 				nb_instructions_assembleur++;
 }
 	

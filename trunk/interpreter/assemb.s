@@ -1,21 +1,10 @@
 AFC @1 0
-COP @2 @1
-AFC @3 2
-COP @4 @3
-AFC @5 1
-COP @6 @5
-AFC @7 10
-INF @8 @2 @7
-JMF @8 22 
-AFC @9 2
-DIV @10 @2 @9
-AFC @11 0
-EQU @12 @10 @11
-JMF @12 17 
-PRI @4
-JMP 18 
-PRI @6
-AFC @13 1
-ADD @14 @2 @13
-COP @2 @14 
-JMP 8
+COP @1 @1
+AFC @2 3
+AFC @3 4
+AFC @4 5
+MUL @5 @3 @4
+ADD @6 @2 @5
+COP @1 @6 
+PRI @1
+
