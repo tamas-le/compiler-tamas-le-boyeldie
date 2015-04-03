@@ -101,6 +101,7 @@ int get_id_for_name(char * name){
 
 symbole* symb_pop(){
 	symbole * symb=(symbole *)list_pop(table_des_symboles);
+	id_courant--;
 	return symb;
 }
 
