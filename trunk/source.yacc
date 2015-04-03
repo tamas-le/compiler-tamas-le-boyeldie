@@ -172,13 +172,13 @@ Printf : tPRINT tPO tID tPF{
 //ID : tID {printf("variable : %s \n",$1);$$=$1;}
 
 Number : 
-	Number tPLUS Number {fprintf(fic,"ADD @%d @%d @%d\n", $1, $1, $3);symb_pop(); $$=$1;nb_instructions_assembleur++;}
+	Number tPLUS Number {int adr=insert(" ",TMP);fprintf(fic,"ADD @%d @%d @%d\n", adr, $1, $3); $$=adr;nb_instructions_assembleur++;}
 	
-	|Number tMOINS Number {fprintf(fic,"SOU @%d @%d @%d\n", $1, $1, $3);symb_pop(); $$=$1;nb_instructions_assembleur++;}
+	|Number tMOINS Number {int adr=insert(" ",TMP);fprintf(fic,"SOU @%d @%d @%d\n", adr, $1, $3); $$=adr;nb_instructions_assembleur++;}
 	
-	|Number tMUL Number {fprintf(fic,"MUL @%d @%d @%d\n", $1, $1, $3);symb_pop(); $$=$1;nb_instructions_assembleur++;}
+	|Number tMUL Number {int adr=insert(" ",TMP);fprintf(fic,"MUL @%d @%d @%d\n", adr, $1, $3); $$=adr;nb_instructions_assembleur++;}
 	
-	|Number tDIV Number {fprintf(fic,"DIV @%d @%d @%d\n", $1, $1, $3);symb_pop(); $$=$1;nb_instructions_assembleur++;} //(4*5)+5
+	|Number tDIV Number {int adr=insert(" ",TMP);fprintf(fic,"DIV @%d @%d @%d\n",adr, $1, $3); $$=adr;nb_instructions_assembleur++;} //(4*5)+5
 	
 	|tPO Number tPF {$$=$2;} //(4)
 	
@@ -275,24 +275,24 @@ While: tWHILE tPO Condition tPF{
 Condition : 
 	Number tLT Number 
 					{
-						fprintf(fic,"INF @%d @%d @%d\n",$1,$1,$3);
+						int adr=insert(" ",TMP);
+						fprintf(fic,"INF @%d @%d @%d\n",adr,$1,$3);
 						nb_instructions_assembleur++;
-						symb_pop();
-						$$=$1;
+						$$=adr;
 					}
 	|Number tGT Number
 					{
-						fprintf(fic,"SUP @%d @%d @%d\n",$1,$1,$3);
+						int adr=insert(" ",TMP);
+						fprintf(fic,"SUP @%d @%d @%d\n",adr,$1,$3);
 						nb_instructions_assembleur++;
-						symb_pop();
-						$$=$1;
+						$$=adr;
 					}  
 	|Number tEGAL tEGAL Number
 					{
-						fprintf(fic,"EQU @%d @%d @%d\n",$1,$1,$4);
+						int adr=insert(" ",TMP);
+						fprintf(fic,"EQU @%d @%d @%d\n",adr,$1,$4);
 						nb_instructions_assembleur++;
-						symb_pop();
-						$$=$1;
+						$$=adr;
 					}  
 
 %% 
