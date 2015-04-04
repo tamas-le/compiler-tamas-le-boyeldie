@@ -1,20 +1,19 @@
 
-#define NOT_INITIALISED 0
-#define CONSTANT 1
-#define INITIALISED 2
-#define TMP 3
-
 #include "../list/list.h"
 
 #ifndef SYMB
 #define SYMB
+
+typedef enum type_state{
+	NOT_INITIALISED,CONSTANT,INITIALISED,TMP,FUNCTION
+}type_state;
 
 
 typedef struct symbole
 {
 	int id;
 	char * nom;
-	int state;
+	type_state state;
 
 } symbole;
 
@@ -42,10 +41,10 @@ int get_id_for_name(char * name);
 symbole* symb_pop();
 
 
-int insert(char * nom,int state);
+int insert(char * nom,type_state state);
 
 
-int change_state(int newstate,char * name);
+int change_state(type_state newstate,char * name);
 
 int get_state(char *name);
 

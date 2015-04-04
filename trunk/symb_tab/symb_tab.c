@@ -106,7 +106,7 @@ symbole* symb_pop(){
 }
 
 // mettre un element dans la table renvoie 0 si succès -1 sinon
-int insert(char * nom,int state){
+int insert(char * nom,type_state state){
 
 	if (nom ==NULL || state<0 || state>3 ){
 		return -1;
@@ -135,7 +135,7 @@ int insert(char * nom,int state){
 }
 
 //changer le flag d'un élément
-int change_state(int newstate,char * name){
+int change_state(type_state newstate,char * name){
 
 	if (name ==NULL || newstate<0 || newstate>3 ){
 		return -1;

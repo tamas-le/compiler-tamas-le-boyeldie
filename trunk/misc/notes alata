@@ -1,25 +1,3 @@
-while (i==4){
-	j=12;
-	v=j+k;
-
-}
-
-// while(i==4)
-AFC @t1 4
-EQU @t1 @t1 @i
-JMF @t1
-
-//j=12;
-AFC @t1 12
-COP @j @t1
-
-//v=j+k;
-
-COP @t1 @j
-COP @t2 @k
-ADD @t1 @t2 @k
-COP @v @t1
-
-JMP 1
-
-Il faut une table : d'où je saute / où je saute 
+1) Conflits reduce/reduce grave ?
+2) Pointeur vs fonctions ?
+3) Gestion des erreurs jusqu'ou on va ?
