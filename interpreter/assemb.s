@@ -2,9 +2,8 @@ AFC @1 4
 COP @1 @1
 AFC @2 0
 COP @2 @2
-AFC @3 4
-EQU @4 @1 @3
-JMF @4 10 
-PRI @2
+SUP @3 @1 @2
+JMF @3 9  
+PRI @1
 JMP 10 
-
+PRI @2

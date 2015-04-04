@@ -47,7 +47,10 @@
 /********************************************************/
 
 
-S:tINT tMAIN tPO tPF tAO Declarationlist Statementlist tAF {
+//Fonction peut se dériver soit en main soit en une autre fonction
+//Faire fonctionner les constantes
+
+S:Main {
 	//printf("Main is OK\n");
 	//print_tab_symb();
 
@@ -59,7 +62,12 @@ S:tINT tMAIN tPO tPF tAO Declarationlist Statementlist tAF {
 	//print_tab_symb();
 }
 
+Main : tINT tMAIN tPO tPF tAO Declarationlist Statementlist tAF
 
+/*Fonctionlist : Fonction Fonctionlist
+			| Fonction
+
+Fonction : tINT tID tPO tPF tAO tAF*/
 
 
 /********************************************************/
@@ -75,7 +83,13 @@ Declarationlist :
 
 Declarations : 
 	Declaration tPV {printf("Declaration is OK\n");}
-	|tCONST tINT tID tEGAL Number tPV {printf("Constante is OK \n");insert($3,CONSTANT);}
+	|tCONST tINT tID tEGAL Number tPV {
+		symb_pop();
+		printf("Constante is OK \n");
+		int adr=insert($3,CONSTANT);
+		fprintf(fic, "COP @%d @%d\n",adr,$5);
+		nb_instructions_assembleur++; 
+	}
 	|DeclarationMultiples tPV {printf("DeclarationMul OK \n");} 
 
 
