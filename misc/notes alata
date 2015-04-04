@@ -10,3 +10,5 @@
 3) Mettre en place des arguments visibles dans la fonction uniquement Ajouter un état argument !!!!
 4) Grammaire des appels de fonction 
 5) Lors de l'appel d'une fonction : on stocke les valeurs des arguments dans les cases reservées
+6) On stocke la ligne à laquelle il faudra revenir
+
