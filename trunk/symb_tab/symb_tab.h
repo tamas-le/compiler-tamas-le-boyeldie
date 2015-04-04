@@ -21,7 +21,7 @@ int compare_symb (list_node * node,void * valeur);
 
 void display_symb(list_node * node);
 
-void print_symb(symbole *symb);
+//void print_symb(symbole *symb);
 
 
 

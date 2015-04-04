@@ -1,13 +1,15 @@
 
+int test(){
+	int j=5;
+	printf(j);
+	printf(j);
+	printf(j);
+	j=j+8;
+	j=6*j;
+	return j;
+}
+
 int main() {
 	int i=4;
-	int i=2;
-	const int j=0;
-	const int k=i+j;
-	if (i>j){
-		printf(i);
-	} else {
-		printf(j);
-	}
 	return 0;
 }

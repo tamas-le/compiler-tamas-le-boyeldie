@@ -20,28 +20,30 @@ int compare_symb (list_node * node,void * valeur){
 
 void display_symb(list_node * node){
 	symbole * test=(symbole *)node->data;
-	printf("\n----------------------------------------\n");
-	printf("Nom du symbole %s \n",test->nom);
-	printf("id : %d\n",test->id );
-
+	char * chaine =malloc(sizeof(char)*30);
 	switch (test->state){
-		case 0:
-		printf("Variable non initialisée\n");
+		case NOT_INITIALISED:
+		chaine="Variable non initialisée";
 		break; 
-		case 1:
-		printf("Constante\n");
+		case CONSTANT:
+		chaine="Constante";
 		break;
-		case 2:
-		printf("Variable initialisée\n");
+		case INITIALISED:
+		chaine="Variable initialisée";
 		break;
-		case 3:
-		printf("Variable temporaire\n");
+		case TMP:
+		chaine="Variable temporaire";
+		break;
+		case FUNCTION:
+		chaine="Nom de Fonction";
 		break;
 	}
-	printf("----------------------------------------\n");
+
+	printf("id : %d | Nom du symbole %s | %s\n",test->id,test->nom,chaine);
+
 }
 
-void print_symb(symbole *symb){
+/*void print_symb(symbole *symb){
 	printf("----------------------------------------\n");
 	printf("Nom du symbole %s \n",symb->nom);
 	printf("id : %d\n",symb->id );
@@ -64,7 +66,7 @@ void print_symb(symbole *symb){
 	}
 	printf("----------------------------------------\n");
 
-}
+}*/
 
 
 

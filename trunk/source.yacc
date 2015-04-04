@@ -65,8 +65,18 @@ Fonctionlist : Fonction Fonctionlist
 
 Fonction : tINT tID{
 			insert($2,FUNCTION);
-			
-			} 
+			if (strcmp("main",$2)==0){
+				printf("C'est le main !!!!!\n");
+				update_jump(-1,nb_instructions_assembleur+1);
+				jump *j=(jump *)jump_pop();
+				fclose(fic);
+				replace_line(j->from,j->to,fic);
+				fopen("./ass.ass","a+");
+			} else {
+				printf("C'est pas le main, c'est : %s\n",$2);
+			}
+
+		} 
 tPO tPF tAO Declarationlist Statementlist tRETURN Number tPV tAF
 
 
@@ -347,7 +357,7 @@ int main() {
 	init_jump();
 	fprintf(fic, "JMP ???\n");
 	nb_instructions_assembleur++;
-	//add_jump(nb_instructions_assembleur,-1);
+	add_jump(nb_instructions_assembleur,-1);
 
 	return yyparse();
 }

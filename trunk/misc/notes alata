@@ -1,3 +1,12 @@
 1) Conflits reduce/reduce grave ?
 2) Pointeur vs fonctions ?
 3) Gestion des erreurs jusqu'ou on va ?
+
+
+
+--------------------------
+1) Associer chaque symbole à une fonction
+2) Associer chaque symbole de fonction à une donnée qui contiendra : la ligne ou elle démarre / le nombre d'argument
+3) Mettre en place des arguments visibles dans la fonction uniquement Ajouter un état argument !!!!
+4) Grammaire des appels de fonction 
+5) Lors de l'appel d'une fonction : on stocke les valeurs des arguments dans les cases reservées
