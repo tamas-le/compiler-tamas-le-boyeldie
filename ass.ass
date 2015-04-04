@@ -1,14 +1,15 @@
-JMP ???
-AFC @2 4
+JMP 13 
+AFC @2 5
 COP @2 @2
-AFC @3 2
-AFC @3 0
-COP @3 @3
-ADD @4 @2 @3
-COP @4 @4
-SUP @5 @2 @3
-JMF @5 13 
 PRI @2
-JMP 14 
-PRI @3
-AFC @6 0
+PRI @2
+PRI @2
+AFC @3 8
+ADD @4 @2 @3
+COP @2 @4 
+AFC @4 6
+MUL @5 @4 @2
+COP @2 @5 
+AFC @6 4
+COP @6 @6
+AFC @7 0
