@@ -20,9 +20,10 @@
 {int nb; char *id;}
 
 	
-%token tMAIN tPO tPF tAO tAF tCONST tINT tVIR tPV tPRINT tLT tGT 
+%token tPO tPF tAO tAF tCONST tINT tVIR tPV tPRINT tLT tGT 
 %token tPLUS tMOINS tMUL tDIV tEGAL
 %token tIF tELSE tWHILE
+%token tRETURN
 %token <nb> tNB;
 %token <id> tID;
 
@@ -48,26 +49,27 @@
 
 
 //Fonction peut se dériver soit en main soit en une autre fonction
-//Faire fonctionner les constantes
 
-S:Main {
-	//printf("Main is OK\n");
-	//print_tab_symb();
-
+S:Fonctionlist {
+	print_tab_symb();
+	
 	fclose(fic);
 	printf("Nombre d'instructions assembleur : %d\n",nb_instructions_assembleur);
 
 	destroy_table();
 	destroy_jump_table();
-	//print_tab_symb();
 }
 
-Main : tINT tMAIN tPO tPF tAO Declarationlist Statementlist tAF
-
-/*Fonctionlist : Fonction Fonctionlist
+Fonctionlist : Fonction Fonctionlist
 			| Fonction
 
-Fonction : tINT tID tPO tPF tAO tAF*/
+Fonction : tINT tID{
+			insert($2,FUNCTION);
+			
+			} 
+tPO tPF tAO Declarationlist Statementlist tRETURN Number tPV tAF
+
+
 
 
 /********************************************************/
@@ -87,18 +89,28 @@ Declarations :
 		symb_pop();
 		printf("Constante is OK \n");
 		int adr=insert($3,CONSTANT);
-		fprintf(fic, "COP @%d @%d\n",adr,$5);
-		nb_instructions_assembleur++; 
+		if (adr != -1){
+			fprintf(fic, "COP @%d @%d\n",adr,$5);
+			nb_instructions_assembleur++;
+		} else {
+			yyerror("Cette variable a déja été déclarée");
+		}
+ 
 	}
 	|DeclarationMultiples tPV {printf("DeclarationMul OK \n");} 
 
 
-Declaration : tINT tID {insert($2,NOT_INITIALISED);} // int i
+Declaration : tINT tID {if(insert($2,NOT_INITIALISED)==-1) yyerror("Cette variable a déja été déclarée");} // int i
 Declaration : tINT tID tEGAL Number{
 					symb_pop();
 					int adr=insert($2,INITIALISED);
-					fprintf(fic, "COP @%d @%d\n",adr,$4);
-					nb_instructions_assembleur++;
+					if (adr != -1){
+						fprintf(fic, "COP @%d @%d\n",adr,$4);
+						nb_instructions_assembleur++;
+					}else {
+						yyerror("Cette variable a déja été déclarée");
+					}
+					
 				} 
 
 
@@ -114,8 +126,13 @@ AffectationDeclaration :
 		$$=$1;
 		symb_pop();
 		int adr=insert($1,INITIALISED);
-		fprintf(fic, "COP @%d @%d\n",adr,$3);
-		nb_instructions_assembleur++;
+		if (adr != -1){
+			fprintf(fic, "COP @%d @%d\n",adr,$3);
+			nb_instructions_assembleur++;
+		} else {
+			yyerror("Une variable a déja été déclarée");
+		}
+
 	}
 
 DeclarationMultiples : tINT DMlist
@@ -123,8 +140,8 @@ DeclarationMultiples : tINT DMlist
 DMlist : 
 	AffectationDeclaration tVIR DMlist 
 	| AffectationDeclaration 
-	| tID tVIR DMlist {insert($1,NOT_INITIALISED);}
-	| tID {insert($1,NOT_INITIALISED);}
+	| tID tVIR DMlist {if (insert($1,NOT_INITIALISED)==-1) yyerror("Une variable a déja été déclarée");}
+	| tID {if (insert($1,NOT_INITIALISED)==-1) yyerror("Une variable a déja été déclarée");}
 
 
 
@@ -328,6 +345,9 @@ int main() {
 	//initialisation des tables symboles et saut
 	init_table();
 	init_jump();
+	fprintf(fic, "JMP ???\n");
+	nb_instructions_assembleur++;
+	//add_jump(nb_instructions_assembleur,-1);
 
 	return yyparse();
 }
