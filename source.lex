@@ -7,7 +7,6 @@
 
 %%
 
-"main" {return tMAIN;}
 "(" {return tPO;}
 ")" {return tPF;}
 "{" {return tAO;}
@@ -17,6 +16,7 @@
 "if" {return tIF;}
 "else" {return tELSE;}
 "while" {return tWHILE;}
+"return" {return tRETURN;}
 "+" {return tPLUS;}
 "-" {return tMOINS;}
 "*" {return tMUL;}

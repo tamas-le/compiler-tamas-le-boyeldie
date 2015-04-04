@@ -45,19 +45,21 @@ void print_symb(symbole *symb){
 	printf("----------------------------------------\n");
 	printf("Nom du symbole %s \n",symb->nom);
 	printf("id : %d\n",symb->id );
-
 	switch (symb->state){
-		case 0:
+		case NOT_INITIALISED:
 		printf("Variable non initialisée\n");
 		break; 
-		case 1:
+		case CONSTANT:
 		printf("Constante\n");
 		break;
-		case 2:
+		case INITIALISED:
 		printf("Variable initialisée\n");
 		break;
-		case 3:
+		case TMP:
 		printf("Variable temporaire\n");
+		break;
+		case FUNCTION:
+		printf("Fonction\n");
 		break;
 	}
 	printf("----------------------------------------\n");
@@ -108,7 +110,7 @@ symbole* symb_pop(){
 // mettre un element dans la table renvoie 0 si succès -1 sinon
 int insert(char * nom,type_state state){
 
-	if (nom ==NULL || state<0 || state>3 ){
+	if (nom ==NULL){
 		return -1;
 	}
 

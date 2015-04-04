@@ -1,11 +1,14 @@
-AFC @1 4
-COP @2 @1
+JMP ???
+AFC @2 4
+COP @2 @2
+AFC @3 2
 AFC @3 0
-COP @4 @3
-ADD @5 @2 @4
-COP @6 @5
-SUP @7 @2 @4
-JMF @7 11 
+COP @3 @3
+ADD @4 @2 @3
+COP @4 @4
+SUP @5 @2 @3
+JMF @5 13 
 PRI @2
-JMP 12 
-PRI @4
+JMP 14 
+PRI @3
+AFC @6 0

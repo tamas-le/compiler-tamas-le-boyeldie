@@ -1,6 +1,7 @@
 
 int main() {
-	const int i=4;
+	int i=4;
+	int i=2;
 	const int j=0;
 	const int k=i+j;
 	if (i>j){
@@ -8,4 +9,5 @@ int main() {
 	} else {
 		printf(j);
 	}
+	return 0;
 }
