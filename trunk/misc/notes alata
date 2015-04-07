@@ -12,3 +12,36 @@
 5) Lors de l'appel d'une fonction : on stocke les valeurs des arguments dans les cases reservées
 6) On stocke la ligne à laquelle il faudra revenir
 
+
+
+Les fonctions: 
+Il faut ajouter des instructions assembleurs 
+- CALL
+- RET
+- INC
+- DEC 
+Les deux dernières servent à la sauvegarde du contexte.
+
+On crée la table des symboles des qu'on parse la premiere fonction
+Un scope indique le niveau d'imbrication ie à chaque fois qu'on trouve une accolade ouvrante on incremente le scope de 1 et quand on a une accolade fermante on décrémente.
+
+Dans le main, quand on rencontre une fonction, il faut déplacer le contexte. Quand on appelle une fonction on déplace le pointeur de la mémoire vers le haut. C'est là qu'on utilise INC et DEC.
+(Plus floue cette partie)
+
+Le INC et le DEC permettent d'incrémenter la mémoire, et à l'adresse relative, on ajoute la valeur du pointeur (qui a été incrémenté) et qui nous donne du coup l'adresse de la mémoire.
+
+INC X
+CALL f
+DEC X
+
+Avec X le nombre de variables déclarées plus tot dans le main avant l'appel de fonction.
+
+La mémoire : (de bas en haut)
+
+variables de la fonction
+adresse de retour
+valeur de retour
+parametres fonctions
+variables main
+
+
