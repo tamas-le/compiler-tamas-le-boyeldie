@@ -1,13 +1,22 @@
 %{
 	#include <stdio.h>
+	#include <string.h>
 	#include "symb_tab/symb_tab.h"
 	#include "jumper/jump.h"
 	#include "ass_file/file_ass.h"
+	#include "list_fonction/list_fonction.h"
+
 
 	FILE *fic;
 	int nb_instructions_assembleur=0;
+
+	char * nom_fonction_courante;
+
+
 	extern int yylineno;
 	extern char * yytext;
+
+
 %}
 
 
@@ -52,20 +61,30 @@
 
 S:Fonctionlist {
 	print_tab_symb();
+	print_list_fonction();
 	
 	fclose(fic);
 	printf("Nombre d'instructions assembleur : %d\n",nb_instructions_assembleur);
 
+	int i;
 	destroy_table();
 	destroy_jump_table();
+	destroy_list_fonction();
 }
 
 Fonctionlist : Fonction Fonctionlist
 			| Fonction
 
 Fonction : tINT tID{
-			insert($2,FUNCTION);
+			nom_fonction_courante=$2;
+
+			if (add_fonction(nom_fonction_courante,nb_instructions_assembleur+1)==-1){
+				yyerror("Cette fonction existe déja !!!");
+			}
+			
+			printf("Fonction courante : %s\n",nom_fonction_courante );
 			if (strcmp("main",$2)==0){
+
 				printf("C'est le main !!!!!\n");
 				update_jump(-1,nb_instructions_assembleur+1);
 				jump *j=(jump *)jump_pop();
@@ -77,7 +96,18 @@ Fonction : tINT tID{
 			}
 
 		} 
-tPO tPF tAO Declarationlist Statementlist tRETURN Number tPV tAF
+tPO Argumentlist tPF tAO Declarationlist Statementlist tRETURN Number{
+	fprintf(fic, "RET\n");
+	nb_instructions_assembleur++;
+} tPV tAF {
+	reset_index();
+}
+
+
+Argumentlist : 
+	tINT tID tVIR Argumentlist{smart_insert($2,ARGUMENT,nom_fonction_courante);inc_nb_arg(nom_fonction_courante);}
+	|tINT tID{smart_insert($2,ARGUMENT,nom_fonction_courante);inc_nb_arg(nom_fonction_courante);}
+	|
 
 
 
@@ -98,7 +128,7 @@ Declarations :
 	|tCONST tINT tID tEGAL Number tPV {
 		symb_pop();
 		printf("Constante is OK \n");
-		int adr=insert($3,CONSTANT);
+		int adr=smart_insert($3,CONSTANT,nom_fonction_courante);
 		if (adr != -1){
 			fprintf(fic, "COP @%d @%d\n",adr,$5);
 			nb_instructions_assembleur++;
@@ -110,10 +140,10 @@ Declarations :
 	|DeclarationMultiples tPV {printf("DeclarationMul OK \n");} 
 
 
-Declaration : tINT tID {if(insert($2,NOT_INITIALISED)==-1) yyerror("Cette variable a déja été déclarée");} // int i
+Declaration : tINT tID {if(smart_insert($2,NOT_INITIALISED,nom_fonction_courante)==-1) yyerror("Cette variable a déja été déclarée");} // int i
 Declaration : tINT tID tEGAL Number{
 					symb_pop();
-					int adr=insert($2,INITIALISED);
+					int adr=smart_insert($2,INITIALISED,nom_fonction_courante);
 					if (adr != -1){
 						fprintf(fic, "COP @%d @%d\n",adr,$4);
 						nb_instructions_assembleur++;
@@ -135,7 +165,7 @@ AffectationDeclaration :
 	tID tEGAL Number {
 		$$=$1;
 		symb_pop();
-		int adr=insert($1,INITIALISED);
+		int adr=smart_insert($1,INITIALISED,nom_fonction_courante);
 		if (adr != -1){
 			fprintf(fic, "COP @%d @%d\n",adr,$3);
 			nb_instructions_assembleur++;
@@ -150,8 +180,8 @@ DeclarationMultiples : tINT DMlist
 DMlist : 
 	AffectationDeclaration tVIR DMlist 
 	| AffectationDeclaration 
-	| tID tVIR DMlist {if (insert($1,NOT_INITIALISED)==-1) yyerror("Une variable a déja été déclarée");}
-	| tID {if (insert($1,NOT_INITIALISED)==-1) yyerror("Une variable a déja été déclarée");}
+	| tID tVIR DMlist {if (smart_insert($1,NOT_INITIALISED,nom_fonction_courante)==-1) yyerror("Une variable a déja été déclarée");}
+	| tID {if (smart_insert($1,NOT_INITIALISED,nom_fonction_courante)==-1) yyerror("Une variable a déja été déclarée");}
 
 
 
@@ -171,6 +201,7 @@ Statement :
 	|Printf tPV { printf("printf is OK\n");}
 	|If
 	|While
+	|Appel tPV
 	
 
 
@@ -221,17 +252,17 @@ Printf : tPRINT tPO tID tPF{
 //ID : tID {printf("variable : %s \n",$1);$$=$1;}
 
 Number : 
-	Number tPLUS Number {int adr=insert(" ",TMP);fprintf(fic,"ADD @%d @%d @%d\n", adr, $1, $3); $$=adr;nb_instructions_assembleur++;}
+	Number tPLUS Number {int adr=smart_insert(" ",TMP,NULL);fprintf(fic,"ADD @%d @%d @%d\n", adr, $1, $3); $$=adr;nb_instructions_assembleur++;}
 	
-	|Number tMOINS Number {int adr=insert(" ",TMP);fprintf(fic,"SOU @%d @%d @%d\n", adr, $1, $3); $$=adr;nb_instructions_assembleur++;}
+	|Number tMOINS Number {int adr=smart_insert(" ",TMP,NULL);fprintf(fic,"SOU @%d @%d @%d\n", adr, $1, $3); $$=adr;nb_instructions_assembleur++;}
 	
-	|Number tMUL Number {int adr=insert(" ",TMP);fprintf(fic,"MUL @%d @%d @%d\n", adr, $1, $3); $$=adr;nb_instructions_assembleur++;}
+	|Number tMUL Number {int adr=smart_insert(" ",TMP,NULL);fprintf(fic,"MUL @%d @%d @%d\n", adr, $1, $3); $$=adr;nb_instructions_assembleur++;}
 	
-	|Number tDIV Number {int adr=insert(" ",TMP);fprintf(fic,"DIV @%d @%d @%d\n",adr, $1, $3); $$=adr;nb_instructions_assembleur++;} //(4*5)+5
+	|Number tDIV Number {int adr=smart_insert(" ",TMP,NULL);fprintf(fic,"DIV @%d @%d @%d\n",adr, $1, $3); $$=adr;nb_instructions_assembleur++;} //(4*5)+5
 	
 	|tPO Number tPF {$$=$2;} //(4)
 	
-	|tNB {printf("value : %d \n",$1);int adr=insert(" ",TMP); fprintf(fic,"AFC @%d %d\n",adr,$1);$$=adr;nb_instructions_assembleur++;} // 4
+	|tNB {printf("value : %d \n",$1);int adr=smart_insert(" ",TMP,NULL); fprintf(fic,"AFC @%d %d\n",adr,$1);$$=adr;nb_instructions_assembleur++;} // 4
 	
 	|tID {int adr=get_id_for_name($1);/*int tmp=insert(" ",TMP);fprintf(fic,"COP @%d @%d \n",tmp,adr);*/$$=adr;/*nb_instructions_assembleur++;*/} //toto
 
@@ -324,27 +355,45 @@ While: tWHILE tPO Condition tPF{
 Condition : 
 	Number tLT Number 
 					{
-						int adr=insert(" ",TMP);
+						int adr=smart_insert(" ",TMP,NULL);
 						fprintf(fic,"INF @%d @%d @%d\n",adr,$1,$3);
 						nb_instructions_assembleur++;
 						$$=adr;
 					}
 	|Number tGT Number
 					{
-						int adr=insert(" ",TMP);
+						int adr=smart_insert(" ",TMP,NULL);
 						fprintf(fic,"SUP @%d @%d @%d\n",adr,$1,$3);
 						nb_instructions_assembleur++;
 						$$=adr;
 					}  
 	|Number tEGAL tEGAL Number
 					{
-						int adr=insert(" ",TMP);
+						int adr=smart_insert(" ",TMP,NULL);
 						fprintf(fic,"EQU @%d @%d @%d\n",adr,$1,$4);
 						nb_instructions_assembleur++;
 						$$=adr;
 					}  
 
+/********************************************************/
+/******************* FONCTION ***************************/
+/********************************************************/
+
+
+Appel: tID tPO tPF {
+	int line = get_line($1);
+	if (line!=-1){
+		fprintf(fic,"CALL %d\n",line);
+		nb_instructions_assembleur++;
+	}
+
+
+
+	}
+
+
 %% 
+
 
 
 
@@ -352,12 +401,14 @@ Condition :
 int main() {
 	// initialisation du fichier
 	fic=fopen("./ass.ass", "w+");
-	//initialisation des tables symboles et saut
+	//initialisation des tables symboles et saut et des fonctions
 	init_table();
 	init_jump();
+	init_list_fonction();
 	fprintf(fic, "JMP ???\n");
 	nb_instructions_assembleur++;
 	add_jump(nb_instructions_assembleur,-1);
+	nom_fonction_courante=malloc(sizeof(char)*30);
 
 	return yyparse();
 }

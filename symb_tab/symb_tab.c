@@ -15,7 +15,6 @@ int compare_symb (list_node * node,void * valeur){
 
 	return strcmp(test->nom,pvaleur);
 	
-
 }
 
 void display_symb(list_node * node){
@@ -39,11 +38,17 @@ void display_symb(list_node * node){
 		break;
 	}
 
-	printf("id : %d | Nom du symbole %s | %s\n",test->id,test->nom,chaine);
+	if (test->fonction==NULL){
+		printf("id : %d | Nom du symbole %s | %s | %s\n",test->id,test->nom,chaine,"Pas de fonction.");
+	} else {
+		printf("id : %d | Nom du symbole %s | %s | %s\n",test->id,test->nom,chaine,test->fonction);
+	}
+
+	
 
 }
 
-/*void print_symb(symbole *symb){
+void print_symb(symbole *symb){
 	printf("----------------------------------------\n");
 	printf("Nom du symbole %s \n",symb->nom);
 	printf("id : %d\n",symb->id );
@@ -66,7 +71,7 @@ void display_symb(list_node * node){
 	}
 	printf("----------------------------------------\n");
 
-}*/
+}
 
 
 
@@ -109,8 +114,8 @@ symbole* symb_pop(){
 	return symb;
 }
 
-// mettre un element dans la table renvoie 0 si succès -1 sinon
-int insert(char * nom,type_state state){
+// mettre un element dans la table renvoie son id si succès -1 sinon
+int insert(char * nom,type_state state,char * nom_fonction){
 
 	if (nom ==NULL){
 		return -1;
@@ -127,7 +132,9 @@ int insert(char * nom,type_state state){
 	if (get_id_for_name(nom)==-1){
 		id_courant++;
 		symbole *new_symb=malloc(sizeof(symbole));
+
 		new_symb->nom=nom;
+		strcpy(new_symb->fonction,nom_fonction);
 		new_symb->id =id_courant;
 		new_symb->state=state;
 		list_insert_beginning(table_des_symboles,new_symb);
@@ -141,7 +148,7 @@ int insert(char * nom,type_state state){
 //changer le flag d'un élément
 int change_state(type_state newstate,char * name){
 
-	if (name ==NULL || newstate<0 || newstate>3 ){
+	if (name ==NULL){
 		return -1;
 	}
 	symbole * symb_to_change=get_symbole(name);
@@ -172,15 +179,77 @@ void destroy_table(){
 	list_destroy(table_des_symboles);
 }
 
+int smart_insert(char * nom,type_state state,char * nom_fonction){
+
+	if (nom ==NULL){
+		return -1;
+	}
+
+	if (state ==TMP){
+		// Les symboles temporaires on les insère sans vérifier.
+		nb_tmp++;
+		nom = malloc(sizeof(char)*50);
+		sprintf(nom,"tmp_%d",nb_tmp);
+		id_courant++;
+		symbole *new_symb=malloc(sizeof(symbole));
+		new_symb->nom=nom;
+		new_symb->fonction=nom_fonction;
+		new_symb->id =id_courant;
+		new_symb->state=state;
+		list_insert_beginning(table_des_symboles,new_symb);
+		return id_courant;
+	} else {
+		if (smart_get(nom,nom_fonction)==-1){
+			printf("Existe pas :)\n");
+			//Si le symbole n'existe pas déja !
+			id_courant++;
+			symbole *new_symb=malloc(sizeof(symbole));
+			new_symb->nom=nom;
+			new_symb->fonction=nom_fonction;
+			new_symb->id =id_courant;
+			new_symb->state=state;
+			list_insert_beginning(table_des_symboles,new_symb);
+			return id_courant;
+		} else {
+			printf("Existe :(\n");
+			return -1;
+		}
+	}
+
+	return -1;
+}
+
+int smart_get(char * nom,char * nom_fonction){
+	
+
+	symbole *symbole_courant;
+	list_node* aux = table_des_symboles->node;
+	while(aux !=NULL){
+		symbole_courant=(symbole *)aux->data;
+		if (strcmp(symbole_courant->nom,nom)==0 && strcmp(symbole_courant->fonction,nom_fonction)==0){
+			return symbole_courant->id;
+		}
+		aux=aux->next;
+	}
+	return -1;
+}
+
+void reset_index(){
+	id_courant=0;
+}
+
 
 /*int main (){
 	init_table();
-	insert("toto",NOT_INITIALISED);
-	insert("julien",INITIALISED);
-	insert("  ",TMP);
+	smart_insert("javier",NOT_INITIALISED,"test1");
+	smart_insert("javier",NOT_INITIALISED,"test2");
+	smart_insert("javier",NOT_INITIALISED,"test1");
+	smart_insert("julien",NOT_INITIALISED,"test1");
+
 	print_tab_symb();
-	pop();
-	print_tab_symb();
+	
+
+	printf("-----------------/----------------\n");
 
 
 

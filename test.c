@@ -1,15 +1,15 @@
-
-int test(){
-	int j=5;
-	printf(j);
-	printf(j);
-	printf(j);
-	j=j+8;
-	j=6*j;
-	return j;
+int test(int i, int j){
+	int i=0;
+	int j =2;
+	printf(i);
+	return 0;
 }
 
 int main() {
-	int i=4;
+	int i=3;
+	printf(i);
+	test();
+	printf(i);
 	return 0;
+	
 }
