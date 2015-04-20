@@ -5,7 +5,7 @@
 #define SYMB
 
 typedef enum type_state{
-	NOT_INITIALISED,CONSTANT,INITIALISED,TMP,FUNCTION
+	NOT_INITIALISED,CONSTANT,INITIALISED,TMP,FUNCTION,ARGUMENT
 }type_state;
 
 
@@ -14,6 +14,7 @@ typedef struct symbole
 	int id;
 	char * nom;
 	type_state state;
+	char * fonction;
 
 } symbole;
 
@@ -41,7 +42,7 @@ int get_id_for_name(char * name);
 symbole* symb_pop();
 
 
-int insert(char * nom,type_state state);
+int insert(char * nom,type_state state,char * nom_fonction);
 
 
 int change_state(type_state newstate,char * name);
@@ -51,6 +52,12 @@ int get_state(char *name);
 void print_tab_symb();
 
 void destroy_table();
+
+int smart_insert(char * nom,type_state state,char * nom_fonction);
+
+int smart_get(char * nom,char * nom_fonction);
+
+void reset_index();
 
 
 #endif
