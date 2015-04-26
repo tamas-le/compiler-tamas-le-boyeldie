@@ -1,14 +1,3 @@
-1) Conflits reduce/reduce grave ?
---------------------------
-1) Associer chaque symbole à une fonction
-2) Associer chaque symbole de fonction à une donnée qui contiendra : la ligne ou elle démarre / le nombre d'argument
-3) Mettre en place des arguments visibles dans la fonction uniquement Ajouter un état argument !!!!
-4) Grammaire des appels de fonction 
-5) Lors de l'appel d'une fonction : on stocke les valeurs des arguments dans les cases reservées
-6) On stocke la ligne à laquelle il faudra revenir
-
-
-
 Les fonctions: 
 Il faut ajouter des instructions assembleurs 
 - CALL
@@ -38,5 +27,17 @@ adresse de retour
 valeur de retour
 parametres fonctions
 variables main
+---------------------------------------------
+Pipeline RISC classique : 
+-fetch charge l'instruction dans le pipeline
+-decode l'instruction et adresse les registres
+-execute execute l'instruction
+-memory transfert registre vers mémoire(store) ou mémoire vers registre (load)
+-write back le résultat est stocké dans un registre.
+
+
+
+
+
 
 

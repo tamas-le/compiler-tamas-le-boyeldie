@@ -1,0 +1,15 @@
+Ghdl permet de compiler les fichiers sources (*.vhd) pour en faire des fichiers binaires (*.o) :
+    ghdl -a <fich_module>.vhd
+Le banc de test permet de générer un programme exécutable qui appelle le simulateur :
+    ghdl -e <fich_test>
+Le simulateur peut alors être lancé :
+    ghdl -r <fich_test>
+
+Pour utiliser gtkwave il est possible de créer un fichier de traces :
+    ghdl -r <fich_test> --vcd=<traces>.vcd
+
+La visualisation des traces s'obtient avec gtkwave :
+    gtkwave <traces>.vcd
+
+
+
