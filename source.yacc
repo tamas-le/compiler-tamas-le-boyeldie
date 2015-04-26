@@ -10,6 +10,8 @@
 	FILE *fic;
 	int nb_instructions_assembleur=0;
 
+	int nb_arg=0;
+
 	char * nom_fonction_courante;
 
 
@@ -40,6 +42,7 @@
 %type <id> AffectationDeclaration;
 %type <nb> Number;
 %type <nb> Condition;
+%type <nb> NumberList;
 
 
 %right tEGAL 
@@ -380,16 +383,17 @@ Condition :
 /********************************************************/
 
 
-Appel: tID tPO tPF {
+Appel: tID tPO NumberList{printf("Nb : %d\n",$3 );} tPF {
 	int line = get_line($1);
 	if (line!=-1){
 		fprintf(fic,"CALL %d\n",line);
 		nb_instructions_assembleur++;
 	}
-
-
-
 	}
+
+NumberList: Number tVIR NumberList {$$=$$+1;}
+	| Number {$$=$$+1;}
+	| {$$=0;}
 
 
 %% 
