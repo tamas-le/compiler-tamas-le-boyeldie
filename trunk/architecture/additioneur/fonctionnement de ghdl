@@ -11,5 +11,8 @@ Pour utiliser gtkwave il est possible de créer un fichier de traces :
 La visualisation des traces s'obtient avec gtkwave :
     gtkwave <traces>.vcd
 
+ghdl -a --std=02 --ieee=synopsys afficheur.vhd
+ghdl -a --std=02 --ieee=mentor afficheur.vhd
+
 
 
