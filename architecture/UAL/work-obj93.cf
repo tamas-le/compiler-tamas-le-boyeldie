@@ -1,4 +1,7 @@
 v 3
-file . "ual.vhd" "20150426132519.000" "20150426152522.530":
-  entity alu8bit at 1( 0) + 0 on 11;
-  architecture behavioral of alu8bit at 16( 377) + 0 on 12;
+file . "ual.vhd" "20150427101301.000" "20150427121303.084":
+  entity alu8bit at 1( 0) + 0 on 135;
+  architecture behavioral of alu8bit at 14( 355) + 0 on 136;
+file . "ual_tb.vhd" "20150427101125.000" "20150427121303.150":
+  entity test_ual at 1( 0) + 0 on 137;
+  architecture bench of test_ual at 8( 142) + 0 on 138;
