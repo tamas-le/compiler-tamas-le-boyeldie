@@ -1,0 +1,7 @@
+v 3
+file . "reg.vhd" "20150504085606.000" "20150504105612.068":
+  entity register_bench at 1( 0) + 0 on 409;
+  architecture behavorial of register_bench at 25( 478) + 0 on 410;
+file . "reg_tb.vhd" "20150504085553.000" "20150504105612.120":
+  entity test_reg at 1( 0) + 0 on 411;
+  architecture bench of test_reg at 9( 143) + 0 on 412;

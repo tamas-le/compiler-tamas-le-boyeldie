@@ -1,0 +1,82 @@
+$date
+  Mon May  4 10:56:12 2015
+$end
+$version
+  GHDL v0
+$end
+$timescale
+  1 fs
+$end
+$var reg 4 ! ad_a[3:0] $end
+$var reg 4 " ad_b[3:0] $end
+$var reg 4 # ad_w[3:0] $end
+$var reg 1 $ w $end
+$var reg 1 % rst $end
+$var reg 1 & clk $end
+$var reg 8 ' tdata[7:0] $end
+$var reg 8 ( tqa[7:0] $end
+$var reg 8 ) tqb[7:0] $end
+$scope module tester $end
+$var reg 4 * ra[3:0] $end
+$var reg 4 + rb[3:0] $end
+$var reg 4 , rw[3:0] $end
+$var reg 1 - w $end
+$var reg 8 . data[7:0] $end
+$var reg 1 / rst $end
+$var reg 1 0 clk $end
+$var reg 8 1 qa[7:0] $end
+$var reg 8 2 qb[7:0] $end
+$comment mes_registres is not handled $end
+$var integer 32 3 ad_a $end
+$var integer 32 4 ad_b $end
+$var integer 32 5 ad_w $end
+$var reg 1 6 test $end
+$upscope $end
+$enddefinitions $end
+#0
+b0001 !
+b0010 "
+b0001 #
+0$
+0%
+1&
+b10111011 '
+b00000000 (
+b00000000 )
+b0001 *
+b0010 +
+b0001 ,
+0-
+b10111011 .
+0/
+10
+b00000000 1
+b00000000 2
+b1 3
+b10 4
+b1 5
+16
+#5000000
+0&
+00
+#6000000
+1$
+1%
+1-
+1/
+#10000000
+1&
+b10111011 (
+10
+b10111011 1
+06
+#15000000
+0&
+00
+#20000000
+1&
+10
+16
+#25000000
+0&
+00

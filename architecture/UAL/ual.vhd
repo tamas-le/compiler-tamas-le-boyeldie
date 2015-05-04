@@ -20,6 +20,7 @@ begin
 	variable temp16:std_logic_vector(15 downto 0);
 	
 	begin
+	--On fait pas la division c'est pas synthetisable. On a aussi and, xor, or.
 	negative<='0';
 	carry <='0';
 	overflow <='0';
