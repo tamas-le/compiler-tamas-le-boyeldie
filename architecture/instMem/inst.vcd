@@ -1,0 +1,59 @@
+$date
+  Mon May  4 11:56:35 2015
+$end
+$version
+  GHDL v0
+$end
+$timescale
+  1 fs
+$end
+$var reg 8 ! ad[7:0] $end
+$var reg 32 " output[31:0] $end
+$var reg 1 # clk $end
+$scope module test $end
+$var reg 8 $ adresse[7:0] $end
+$var reg 1 % clk $end
+$var reg 32 & output[31:0] $end
+$comment mes_inst is not handled $end
+$var integer 32 ' ad_int $end
+$var reg 8 ( op[7:0] $end
+$var reg 8 ) a[7:0] $end
+$var reg 8 * b[7:0] $end
+$var reg 8 + c[7:0] $end
+$upscope $end
+$enddefinitions $end
+#0
+b00000001 !
+bUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU "
+1#
+b00000001 $
+1%
+bUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU &
+b1 '
+b00000110 (
+b00000000 )
+b10111011 *
+b00000000 +
+#5000000
+0#
+0%
+#10000000
+b00000110000000001011101100000000 "
+1#
+1%
+b00000110000000001011101100000000 &
+#15000000
+0#
+0%
+#20000000
+1#
+1%
+#25000000
+0#
+0%
+#30000000
+1#
+1%
+#35000000
+0#
+0%
