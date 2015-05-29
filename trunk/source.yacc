@@ -38,7 +38,7 @@
 %token <nb> tNB;
 %token <id> tID;
 
-%token tCOMM
+
 
 
 %type <id> AffectationDeclaration;
