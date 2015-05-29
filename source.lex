@@ -25,7 +25,7 @@
 "<" { return tLT;}
 ">" {return tGT;}
 " " {}
-"//"[^\n]*"\n" {return tCOMM;}
+"//"[^\n]*"\n" {}
 "	" {}
 "," {return tVIR;}
 "\n" {yylineno = yylineno + 1;}
