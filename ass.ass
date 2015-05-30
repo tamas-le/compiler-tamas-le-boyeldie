@@ -1,4 +1,4 @@
-JMP 5  
+CALL 5  
 PRI @2
 AFC @3 0
 RET
