@@ -411,7 +411,7 @@ int main() {
 	init_table();
 	init_jump();
 	init_list_fonction();
-	fprintf(fic, "JMP ???\n");
+	fprintf(fic, "CALL ???\n");
 	nb_instructions_assembleur++;
 	add_jump(nb_instructions_assembleur,-1);
 	nom_fonction_courante=malloc(sizeof(char)*30);
